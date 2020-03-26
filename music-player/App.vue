@@ -64,7 +64,6 @@
 		display: flex;
 		flex: 1;
 		flex-direction: column;
-		background-color: #efeff4;
 		padding: 10px;
 	}
 
