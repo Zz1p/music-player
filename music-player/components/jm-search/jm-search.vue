@@ -30,8 +30,8 @@
 				showHistory: false
 			}
 		},
-		created() {
-			this.searchHistory = uni.getStorageSync('searchLocal').split('-');
+		created() {length
+			this.searchHistory = uni.getStorageSync('searchLocal').length ? uni.getStorageSync('searchLocal').split('-') : [];
 		},
 		methods: {
 			clearHistory() {
@@ -60,7 +60,7 @@
 					});
 					return false;
 				}
-				this.searchHistory.push(this.key)
+				this.searchHistory.includes(this.key) ? '' : this.searchHistory.unshift(this.key)
 				uni.setStorage({
 					key: 'searchLocal',
 					data: this.searchHistory.join('-')

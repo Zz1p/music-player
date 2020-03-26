@@ -16,6 +16,12 @@
 		},
 		computed: mapState(['forcedLogin', 'hasLogin', 'userName']),
 		onLoad() {
+			uni.request({
+				url: 'http://120.77.176.21:3000/top/list?idx=1',
+				success(res) {
+					console.log(res)
+				}
+			})
 			if (!this.hasLogin) {
 				uni.showModal({
 					title: '未登录',
