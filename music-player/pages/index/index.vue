@@ -1,5 +1,6 @@
 <template>
 	<view class="content">
+		<search></search>
 	</view>
 </template>
 
@@ -7,8 +8,12 @@
 	import {
 		mapState
 	} from 'vuex'
-	
+	import search from '@/components/jm-search/jm-search.vue'
+
 	export default {
+		components: {
+			search
+		},
 		computed: mapState(['forcedLogin', 'hasLogin', 'userName']),
 		onLoad() {
 			if (!this.hasLogin) {
