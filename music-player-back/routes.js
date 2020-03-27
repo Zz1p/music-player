@@ -2,11 +2,11 @@ import Router from "koa-router";
 
 const router = new Router();
 
-router.get('/api/list/:index', async ctx => {
+router.get('/api/list', async ctx => {
     ctx.body = ctx.query;
 });
 
-router.post('/login', async ctx => {
+router.post('/api/login', async ctx => {
     ctx.body = 'login'
 });
 
