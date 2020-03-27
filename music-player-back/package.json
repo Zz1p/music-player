@@ -6,7 +6,12 @@
   "scripts": {
     "start": "nodemon --exec babel-node app.js"
   },
-  "dependencies": {},
+  "dependencies": {
+    "koa": "^2.11.0",
+    "koa-bodyparser": "^4.3.0",
+    "koa-router": "^8.0.8",
+    "koa-static": "^5.0.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@babel/node": "^7.8.7",
