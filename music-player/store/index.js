@@ -13,8 +13,8 @@ const store = new Vuex.Store({
 		userName: ""
 	},
 	mutations: {
-		login(state, userName) {
-			state.userName = userName || '新用户';
+		login(state, payload) {
+			state.userName = payload || '新用户';
 			state.hasLogin = true;
 		},
 		logout(state) {
@@ -29,7 +29,10 @@ const store = new Vuex.Store({
 				method: 'POST',
 				data: account
 			}).then(res => {
-				return res[1];
+				if (res[1].data.validUser === true) {
+					commit('login', account.username);
+				}
+				return res[1].data;
 			}).catch(err => {
 				console.log(err);
 			});

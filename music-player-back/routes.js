@@ -7,7 +7,9 @@ router.get('/api/list', async ctx => {
 });
 
 router.post('/api/login', async ctx => {
-    ctx.body = 'login'
+    ctx.body = {
+        validUser: true,
+        token: jwt.sign({username: ctx.request.fields.username, password: ctx.request.fields.password}, )
+    }
 });
-
 export default router;

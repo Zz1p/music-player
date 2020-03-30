@@ -20,8 +20,8 @@
 				url: 'http://120.77.176.21:3000/top/list?idx=1',
 			}).then(res => {
 				console.log(res[1])
-			}).catch(_ => {
-				console.log('err');
+			}).catch(err => {
+				console.log(err);
 			})
 			if (!this.hasLogin) {
 				uni.showModal({
