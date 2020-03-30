@@ -3,7 +3,7 @@
 		<view class="input-group">
 			<view class="input-row border">
 				<text class="title">账号：</text>
-				<m-input class="m-input" type="text" clearable focus v-model="account" placeholder="请输入账号"></m-input>
+				<m-input class="m-input" type="text" clearable focus v-model="username" placeholder="请输入账号"></m-input>
 			</view>
 			<view class="input-row">
 				<text class="title">密码：</text>
@@ -16,13 +16,6 @@
 		<view class="action-row">
 			<navigator url="../reg/index">注册账号</navigator>
 		</view>
-			<view class="oauth-image" v-for="provider in providerList" :key="provider.value">
-				<image :src="provider.image" @tap="oauth(provider.value)"></image>
-				<!-- #ifdef MP-WEIXIN -->
-				<button v-if="!isDevtools" open-type="getUserInfo" @getuserinfo="getUserInfo"></button>
-				<!-- #endif -->
-			</view>
-		</view>
 	</view>
 </template>
 
@@ -30,7 +23,8 @@
 	import service from '../../service.js';
 	import {
 		mapState,
-		mapMutations
+		mapMutations,
+		mapActions
 	} from 'vuex'
 	import mInput from '../../components/m-input.vue'
 
@@ -42,7 +36,7 @@
 			return {
 				providerList: [],
 				hasProvider: false,
-				account: '',
+				username: '',
 				password: '',
 				positionTop: 0,
 				isDevtools: false,
@@ -50,29 +44,7 @@
 		},
 		computed: mapState(['forcedLogin']),
 		methods: {
-			...mapMutations(['login']),
-			initProvider() {
-				const filters = ['weixin', 'qq', 'sinaweibo'];
-				uni.getProvider({
-					service: 'oauth',
-					success: (res) => {
-						if (res.provider && res.provider.length) {
-							for (let i = 0; i < res.provider.length; i++) {
-								if (~filters.indexOf(res.provider[i])) {
-									this.providerList.push({
-										value: res.provider[i],
-										image: '../../static/img/' + res.provider[i] + '.png'
-									});
-								}
-							}
-							this.hasProvider = true;
-						}
-					},
-					fail: (err) => {
-						console.error('获取服务供应商失败：' + JSON.stringify(err));
-					}
-				});
-			},
+			...mapActions(['login']),
 			initPosition() {
 				/**
 				 * 使用 absolute 定位，并且设置 bottom 值进行定位。软键盘弹出时，底部会因为窗口变化而被顶上来。
@@ -81,11 +53,7 @@
 				this.positionTop = uni.getSystemInfoSync().windowHeight - 100;
 			},
 			bindLogin() {
-				/**
-				 * 客户端对账号信息进行一些必要的校验。
-				 * 实际开发中，根据业务需要进行处理，这里仅做示例。
-				 */
-				if (this.account.length < 5) {
+				if (this.username.length < 5) {
 					uni.showToast({
 						icon: 'none',
 						title: '账号最短为 5 个字符'
@@ -99,64 +67,24 @@
 					});
 					return;
 				}
-				/**
-				 * 下面简单模拟下服务端的处理
-				 * 检测用户账号密码是否在已注册的用户列表中
-				 * 实际开发中，使用 uni.request 将账号信息发送至服务端，客户端在回调函数中获取结果信息。
-				 */
-				const data = {
-					account: this.account,
+				const account = {
+					username: this.username,
 					password: this.password
 				};
-				const validUser = service.getUsers().some(function(user) {
-					return data.account === user.account && data.password === user.password;
-				});
-				if (validUser) {
-					this.toMain(this.account);
-				} else {
-					uni.showToast({
-						icon: 'none',
-						title: '用户账号或密码不正确',
-					});
-				}
-			},
-			oauth(value) {
-				uni.login({
-					provider: value,
-					success: (res) => {
-						uni.getUserInfo({
-							provider: value,
-							success: (infoRes) => {
-								/**
-								 * 实际开发中，获取用户信息后，需要将信息上报至服务端。
-								 * 服务端可以用 userInfo.openId 作为用户的唯一标识新增或绑定用户信息。
-								 */
-								this.toMain(infoRes.userInfo.nickName);
-							},
-							fail() {
-								uni.showToast({
-									icon: 'none',
-									title: '登陆失败'
-								});
-							}
-						});
-					},
-					fail: (err) => {
-						console.error('授权登录失败：' + JSON.stringify(err));
-					}
-				});
-			},
-			getUserInfo({
-				detail
-			}) {
-				if (detail.userInfo) {
-					this.toMain(detail.userInfo.nickName);
-				} else {
-					uni.showToast({
-						icon: 'none',
-						title: '登陆失败'
-					});
-				}
+				this.login(account)
+					.then(res => {
+						console.log(res);
+						if (res.validUser === true) {
+							this.toMain(account);
+						} else {
+							uni.showToast({
+								icon: 'none',
+								title: '用户账号或密码不正确',
+							});
+						}
+					})
+					.catch(err => console.log(err))
+
 			},
 			toMain(userName) {
 				this.login(userName);
@@ -176,7 +104,6 @@
 		},
 		onReady() {
 			this.initPosition();
-			this.initProvider();
 			// #ifdef MP-WEIXIN
 			this.isDevtools = uni.getSystemInfoSync().platform === 'devtools';
 			// #endif

@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
 	state: {
+		baseURL: 'http://localhost:3000/api',
 		user: {
 			username: ''
 		},
@@ -19,6 +20,19 @@ const store = new Vuex.Store({
 		logout(state) {
 			state.userName = "";
 			state.hasLogin = false;
+		}
+	},
+	actions: {
+		login({commit,state}, account) {
+			return uni.request({
+				url: state.baseURL + '/login',
+				method: 'POST',
+				data: account
+			}).then(res => {
+				return res[1];
+			}).catch(err => {
+				console.log(err);
+			});
 		}
 	}
 })
