@@ -42,7 +42,6 @@
 				isDevtools: false,
 			}
 		},
-		computed: mapState(['forcedLogin']),
 		methods: {
 			...mapActions(['login']),
 			initPosition() {
@@ -74,6 +73,7 @@
 				this.login(account)
 					.then(res => {
 						if (res.validUser === true) {
+							this.setToken(res.token);
 							this.jump2Main(account.username);
 						} else {
 							uni.showToast({
@@ -83,17 +83,17 @@
 						}
 					})
 					.catch(err => console.log(err))
-
 			},
 			jump2Main(userName) {
-				if (this.forcedLogin) {
-					uni.reLaunch({
-						url: '../index/index',
-					});
-				} else {
-					uni.navigateBack();
-				}
-
+				uni.reLaunch({
+					url: '../index/index',
+				});
+			},
+			setToken(token) {
+				uni.setStorage({
+					key: 'token',
+					data: token
+				})
 			}
 		},
 		onReady() {
@@ -101,7 +101,8 @@
 			// #ifdef MP-WEIXIN
 			this.isDevtools = uni.getSystemInfoSync().platform === 'devtools';
 			// #endif
-		}
+		},
+
 	}
 </script>
 

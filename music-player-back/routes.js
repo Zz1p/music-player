@@ -31,6 +31,8 @@ router.get('/api/list', async ctx => {
 });
 
 router.post('/api/login', async ctx => {
+    const token = jwt.verify(ctx.request.headers.authorization, jwtSecret)
+    console.log(token);
     const user = ctx.request.body;
     ctx.body = {
         validUser: true,

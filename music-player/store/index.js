@@ -14,7 +14,7 @@ const store = new Vuex.Store({
 	},
 	mutations: {
 		login(state, payload) {
-			state.userName = payload || '新用户';
+			state.userName = payload.username || '新用户';
 			state.hasLogin = true;
 		},
 		logout(state) {
@@ -24,15 +24,17 @@ const store = new Vuex.Store({
 	},
 	actions: {
 		login({commit,state}, account) {
-			return uni.request({
+			console.log(this);
+			return this._vm.$axios({
 				url: state.baseURL + '/login',
 				method: 'POST',
-				data: account
+				data: account,
 			}).then(res => {
-				if (res[1].data.validUser === true) {
-					commit('login', account.username);
+				const data = res[1].data;
+				if (data.validUser === true) {
+					commit('login', data);
 				}
-				return res[1].data;
+				return data;
 			}).catch(err => {
 				console.log(err);
 			});

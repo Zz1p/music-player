@@ -11,3 +11,13 @@ const app = new Vue({
 	...App
 })
 app.$mount()
+Vue.prototype.$axios = function(options) {
+	return uni.request({
+		url: options.url,
+		method: options.method,
+		data: options.data,
+		header: {
+			Authorization: uni.getStorageSync('token').length ? uni.getStorageSync('token') : ''
+		}
+	})
+}
