@@ -41,19 +41,18 @@ router.post('/api/login', async ctx => {
 });
 
 router.get('/api/auth', async ctx => {
-    if (ctx.request.headers.authorization) {
-        console.log(ctx.request.headers.authorization.split(' ')[1]);
-        const token = jwt.verify(ctx.request.headers.authorization.split(' ')[1], jwtSecret);
-        console.log(token);
-        return ctx.body = {
-            username: token.username,
+    jwt.verify(ctx.request.headers.authorization.split(' ')[1], jwtSecret, (err, decode) => {
+        if (err) {
+            ctx.body = {
+                validUser: false
+            }
+        }
+        // @todo sql查找用户信息后返回给前端
+        ctx.body = {
+            userInfo: {username: decode.username},
             validUser: true,
         }
-    }
-
-    return ctx.body = {
-        validUser: false
-    }
+    });
 });
 
 export {

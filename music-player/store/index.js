@@ -43,7 +43,11 @@ const store = new Vuex.Store({
 				url: state.baseURL + '/auth',
 				method: 'GET',
 				}).then(res => {
-					console.log(res);
+					const data = res[1].data;
+					console.log(data);
+					if (data.validUser === true) {
+						commit('login', data.userInfo);
+					}
 				}).catch(err => {
 					console.log(err);
 				})  

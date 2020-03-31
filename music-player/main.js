@@ -4,13 +4,6 @@ import store from './store'
 
 Vue.config.productionTip = false
 Vue.prototype.$store = store
-App.mpType = 'app'
-
-const app = new Vue({
-	store,
-	...App
-})
-app.$mount()
 Vue.prototype.$axios = function(options) {
 	return uni.request({
 		url: options.url,
@@ -21,3 +14,10 @@ Vue.prototype.$axios = function(options) {
 		}
 	})
 }
+App.mpType = 'app'
+
+const app = new Vue({
+	store,
+	...App
+})
+app.$mount()

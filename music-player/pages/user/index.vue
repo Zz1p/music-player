@@ -19,7 +19,7 @@
 
 	export default {
 		computed: {
-			...mapState(['hasLogin', 'forcedLogin', 'user'])
+			...mapState(['hasLogin', 'user'])
 		},
 		methods: {
 			...mapMutations(['logout']),

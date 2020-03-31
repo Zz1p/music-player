@@ -13,7 +13,7 @@
 				<view @click="clearHistory" class="grace-more-r grace-search-remove"></view>
 			</view>
 			<view class="searchHistoryBox">
-				<view class="searchHistoryBoxItem" v-for="(item,index) in searchHistory" :key='index'>
+				<view class="searchHistoryBoxItem" v-for="(item,index) in searchHistory" :key='index' @click=show(item)>
 					{{item}}
 				</view>
 				<view class="cancel" @tap="showHistory = false"></view>
@@ -48,7 +48,13 @@
 						}
 					}
 				});
-
+			},
+			setHistory(key) {
+				this.searchHistory.includes(key) ? '' : this.searchHistory.unshift(key)
+				uni.setStorage({
+					key: 'searchLocal',
+					data: this.searchHistory.join('-')
+				});
 			},
 			searchNow() {
 				this.showHistory = false;
@@ -60,11 +66,11 @@
 					});
 					return false;
 				}
-				this.searchHistory.includes(this.key) ? '' : this.searchHistory.unshift(this.key)
-				uni.setStorage({
-					key: 'searchLocal',
-					data: this.searchHistory.join('-')
-				});
+				this.setHistory(this.key);
+			},
+			show(item) {
+				this.key = item;
+				this.searchNow();
 			}
 		}
 	}
