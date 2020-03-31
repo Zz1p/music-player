@@ -1,6 +1,7 @@
 <template>
 	<view class="content">
 		<view v-if="hasLogin" class="info">
+			<view class="avatar"></view>
 			<view class="username">{{user.username}}</view>
 		</view>
 		<view class="btn-row">
@@ -42,6 +43,22 @@
 	}
 </script>
 
-<style>
-
+<style lang="scss">
+	page {
+		background-color: $uni-bg-color-grey;
+	}
+	.info {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin: 20rpx;
+		height: 100rpx;
+		border-radius: 10rpx;
+		background-color: #fff;
+		.avatar {
+			height: 100%;
+			width: 60rpx;
+			background: url(../../static/img/account.png) 50% 50% / contain no-repeat;
+		}
+	}
 </style>

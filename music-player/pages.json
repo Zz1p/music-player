@@ -18,7 +18,8 @@
 		}, {
 			"path": "pages/user/index",
 			"style": {
-				"navigationBarTitleText": "个人中心"
+				"navigationBarTitleText": "个人中心",
+				"backgroundColor":"#007AFF"
 			}
 		}, {
 			"path": "pages/player/index",

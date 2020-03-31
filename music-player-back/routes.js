@@ -11,7 +11,8 @@ const jwtSecret = 'music_player_token';
 
 app.use(bodyParser());
 app.use(koaJwt({
-    secret: jwtSecret
+    secret: jwtSecret,
+    passthrough: true
 }).unless({
     path: [/\/login/]
 }));
@@ -31,13 +32,27 @@ router.get('/api/list', async ctx => {
 });
 
 router.post('/api/login', async ctx => {
-    const token = jwt.verify(ctx.request.headers.authorization, jwtSecret)
-    console.log(token);
     const user = ctx.request.body;
     ctx.body = {
         validUser: true,
         username: user.username,
-        token: jwt.sign({username: user.username, password: user.password}, jwtSecret)
+        token: jwt.sign({username: user.username, password: user.password}, jwtSecret, {expiresIn: 60 * 60 * 24 * 7})
+    }
+});
+
+router.get('/api/auth', async ctx => {
+    if (ctx.request.headers.authorization) {
+        console.log(ctx.request.headers.authorization.split(' ')[1]);
+        const token = jwt.verify(ctx.request.headers.authorization.split(' ')[1], jwtSecret);
+        console.log(token);
+        return ctx.body = {
+            username: token.username,
+            validUser: true,
+        }
+    }
+
+    return ctx.body = {
+        validUser: false
     }
 });
 

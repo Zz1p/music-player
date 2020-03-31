@@ -14,15 +14,9 @@
 		components: {
 			search
 		},
-		computed: mapState(['forcedLogin', 'hasLogin', 'userName']),
+		computed: mapState(['forcedLogin', 'hasLogin']),
 		onLoad() {
-			uni.request({
-				url: 'http://120.77.176.21:3000/top/list?idx=1',
-			}).then(res => {
-				console.log(res[1])
-			}).catch(err => {
-				console.log(err);
-			})
+			this.$store.dispatch('authentication')
 			if (!this.hasLogin) {
 				uni.showModal({
 					title: '未登录',

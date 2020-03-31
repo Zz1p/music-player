@@ -5,26 +5,24 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
 	state: {
-		baseURL: 'http://localhost:3000/api',
+		baseURL: 'http://172.29.10.73:3000/api',
 		user: {
 			username: ''
 		},
 		hasLogin: false,
-		userName: ""
 	},
 	mutations: {
 		login(state, payload) {
-			state.userName = payload.username || '新用户';
+			state.user.username = payload.username || '新用户';
 			state.hasLogin = true;
 		},
 		logout(state) {
-			state.userName = "";
+			state.user.username = "";
 			state.hasLogin = false;
 		}
 	},
 	actions: {
 		login({commit,state}, account) {
-			console.log(this);
 			return this._vm.$axios({
 				url: state.baseURL + '/login',
 				method: 'POST',
@@ -36,8 +34,19 @@ const store = new Vuex.Store({
 				}
 				return data;
 			}).catch(err => {
+				alert(err);
 				console.log(err);
 			});
+		},
+		authentication({commit,state}) {
+			return this._vm.$axios({
+				url: state.baseURL + '/auth',
+				method: 'GET',
+				}).then(res => {
+					console.log(res);
+				}).catch(err => {
+					console.log(err);
+				})  
 		}
 	}
 })

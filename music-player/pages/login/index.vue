@@ -92,7 +92,7 @@
 			setToken(token) {
 				uni.setStorage({
 					key: 'token',
-					data: token
+					data: 'Bearer ' + token
 				})
 			}
 		},
