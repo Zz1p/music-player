@@ -1,6 +1,5 @@
 <template>
 	<view class="content">
-		<view class="title">个人中心</view>
 		<view v-if="hasLogin" class="info">
 			<view class="item userInfo">
 				<view class="left avatar"></view>
@@ -58,39 +57,49 @@
 	}
 
 	.content {
-		.title {
-			font-size: 40rpx;
-			font-weight: bolder; 
-			padding: 20rpx;
-		}
-		.item {
-			display: flex;
-			align-items: center;
-			margin: 20rpx;
-			height: 100rpx;
-			background-color: #fff;
 
-			&.item--active {
-				background-color: $uni-bg-color-hover;
-			}
+		.info {
+			padding-top: 20rpx;
 
-			.left {
-				flex: 1;
-				height: 50%;
-				width: 50rpx;
-
-				&.avatar {
-					background: url(../../static/img/account.png) 50% 50% / contain no-repeat;
+			.item {
+				display: flex;
+				align-items: center;
+				margin: 0 20rpx;
+				height: 120rpx;
+				background-color: #fff;
+				border-bottom: 1px solid $uni-bg-color-grey;
+				
+				&.item--active {
+					background-color: $uni-bg-color-hover;
 				}
 
-				&.collect-img {
-					background: url(../../static/img/collect.png) 50% 50% / contain no-repeat;
-				}
-			}
+				.left {
+					flex: 1;
+					height: 50%;
+					width: 50rpx;
 
-			.right {
-				flex: 3;
-				padding-left: 20rpx;
+					&.avatar {
+						background: url(../../static/img/account.png) 50% 50% / contain no-repeat;
+					}
+
+					&.collect-img {
+						background: url(../../static/img/collect.png) 50% 50% / contain no-repeat;
+					}
+				}
+
+				.right {
+					flex: 3;
+					padding-left: 20rpx;
+					position: relative;
+					&.collect-num::after {
+						position: absolute;
+						right: 10rpx;
+						width: 40rpx;
+						height: 100%;
+						content: '';
+						background: url(../../static/img/forward.png) 50% 50% / contain no-repeat;
+					}
+				}
 			}
 		}
 	}

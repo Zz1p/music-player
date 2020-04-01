@@ -9,7 +9,7 @@ const store = new Vuex.Store({
 		user: {
 			userId: '',
 			username: '',
-			collect: 0
+			collect: 1
 		},
 		hasLogin: false,
 	},
