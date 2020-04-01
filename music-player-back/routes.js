@@ -37,6 +37,8 @@ router.post('/api/login', async ctx => {
     ctx.body = {
         validUser: true,
         userInfo: {
+            userId: 1,
+            collect: 123,
             username: user.username,
             token: jwt.sign({username: user.username, password: user.password}, jwtSecret, {expiresIn: 60 * 60 * 24 * 7})
         }
@@ -52,9 +54,10 @@ router.get('/api/auth', async ctx => {
             }
         }
         // @todo sql查找用户信息后返回给前端
-        console.log(decode);
         ctx.body = {
             userInfo: {
+                userId: 1,
+                collect: 123,
                 username: decode.username,
                 token
             },

@@ -19,7 +19,13 @@
 			"path": "pages/user/index",
 			"style": {
 				"navigationBarTitleText": "个人中心",
-				"backgroundColor":"#007AFF"
+				"backgroundColor": "#007AFF"
+			}
+		}, {
+			"path": "pages/user/collect/index",
+			"style": {
+				"navigationBarTitleText": "收藏",
+				"backgroundColor": "#007AFF"
 			}
 		}, {
 			"path": "pages/player/index",
@@ -52,6 +58,7 @@
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarBackgroundColor": "#fff",
-		"backgroundColor": "#fff"
+		"backgroundColor": "#fff",
+		"navigationStyle": "custom"
 	}
 }

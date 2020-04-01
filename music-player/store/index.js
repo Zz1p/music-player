@@ -7,7 +7,9 @@ const store = new Vuex.Store({
 	state: {
 		baseURL: 'http://172.29.10.73:3000/api',
 		user: {
-			username: ''
+			userId: '',
+			username: '',
+			collect: 0
 		},
 		hasLogin: false,
 	},
