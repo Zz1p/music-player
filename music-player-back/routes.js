@@ -33,23 +33,31 @@ router.get('/api/list', async ctx => {
 
 router.post('/api/login', async ctx => {
     const user = ctx.request.body;
+    // @todo sql查询用户存在的话获取用户信息生成token 不存在的话返回validUser: false
     ctx.body = {
         validUser: true,
-        username: user.username,
-        token: jwt.sign({username: user.username, password: user.password}, jwtSecret, {expiresIn: 60 * 60 * 24 * 7})
+        userInfo: {
+            username: user.username,
+            token: jwt.sign({username: user.username, password: user.password}, jwtSecret, {expiresIn: 60 * 60 * 24 * 7})
+        }
     }
 });
 
 router.get('/api/auth', async ctx => {
-    jwt.verify(ctx.request.headers.authorization.split(' ')[1], jwtSecret, (err, decode) => {
+    const token = ctx.request.headers.authorization.split(' ')[1];
+    jwt.verify(token, jwtSecret, (err, decode) => {
         if (err) {
             ctx.body = {
                 validUser: false
             }
         }
         // @todo sql查找用户信息后返回给前端
+        console.log(decode);
         ctx.body = {
-            userInfo: {username: decode.username},
+            userInfo: {
+                username: decode.username,
+                token
+            },
             validUser: true,
         }
     });

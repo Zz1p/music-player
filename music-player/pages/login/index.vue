@@ -11,7 +11,7 @@
 			</view>
 		</view>
 		<view class="btn-row">
-			<button type="primary" class="primary" @tap="bindLogin">登录</button>
+			<button class="theme-button-color" hover-class="theme-button-color--active" @tap="bindLogin">登录</button>
 		</view>
 		<view class="action-row">
 			<navigator url="../reg/index">注册账号</navigator>
@@ -73,7 +73,6 @@
 				this.login(account)
 					.then(res => {
 						if (res.validUser === true) {
-							this.setToken(res.token);
 							this.jump2Main(account.username);
 						} else {
 							uni.showToast({
@@ -89,12 +88,6 @@
 					url: '../index/index',
 				});
 			},
-			setToken(token) {
-				uni.setStorage({
-					key: 'token',
-					data: 'Bearer ' + token
-				})
-			}
 		},
 		onReady() {
 			this.initPosition();
@@ -106,7 +99,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	.action-row {
 		display: flex;
 		flex-direction: row;
@@ -114,7 +107,7 @@
 	}
 
 	.action-row navigator {
-		color: #007aff;
+		color: $theme-bg-color;
 		padding: 0 10px;
 	}
 

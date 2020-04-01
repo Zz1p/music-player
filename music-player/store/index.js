@@ -15,10 +15,18 @@ const store = new Vuex.Store({
 		login(state, payload) {
 			state.user.username = payload.username || '新用户';
 			state.hasLogin = true;
+			uni.setStorage({
+				key: 'token',
+				data: 'Bearer ' + payload.token
+			})
 		},
 		logout(state) {
 			state.user.username = "";
 			state.hasLogin = false;
+			uni.setStorage({
+				key: 'token',
+				data: ''
+			});
 		}
 	},
 	actions: {
@@ -30,7 +38,7 @@ const store = new Vuex.Store({
 			}).then(res => {
 				const data = res[1].data;
 				if (data.validUser === true) {
-					commit('login', data);
+					commit('login', data.userInfo);
 				}
 				return data;
 			}).catch(err => {
@@ -44,7 +52,7 @@ const store = new Vuex.Store({
 				method: 'GET',
 				}).then(res => {
 					const data = res[1].data;
-					console.log(data);
+					console.log(res);
 					if (data.validUser === true) {
 						commit('login', data.userInfo);
 					}

@@ -76,3 +76,14 @@ $uni-color-paragraph: #3F536E; // 文章段落颜色
 $uni-font-size-paragraph:30rpx;
 
 $theme-bg-color: #0b877f; // 主题色
+$theme-bg-color--active:  #15635e;
+
+
+.theme-button-color {
+	background-color: $theme-bg-color;
+	color: $uni-text-color-inverse;
+}
+
+.theme-button-color--active {
+	background-color: $theme-bg-color--active;
+}
