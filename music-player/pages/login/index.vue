@@ -20,7 +20,6 @@
 </template>
 
 <script>
-	import service from '../../service.js';
 	import {
 		mapState,
 		mapMutations,

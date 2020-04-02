@@ -5,6 +5,7 @@
 </template>
 
 <script>
+	import uniPopup from "@/components/uni-popup/uni-popup.vue"
 	import {mapState} from 'vuex'
 	import search from '@/components/jm-search/jm-search.vue'
 

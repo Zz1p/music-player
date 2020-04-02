@@ -68,9 +68,9 @@ router.get('/api/auth', async ctx => {
     });
 });
 
-router.get('/api/user/collection', async ctx => {
-    const userId = ctx;
-    ctx.body = collection;
+router.get('/api/user/collection',
+    async ctx => {
+    const userId = ctx.request.query.userId;    ctx.body = collection;
     console.log(userId)
 });
 

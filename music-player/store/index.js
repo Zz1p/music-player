@@ -11,29 +11,32 @@ const store = new Vuex.Store({
 			collect: ''
 		},
 		hasLogin: undefined,
+		// 当前播放的歌的id，存到localStorage里去
+		currentSong: '',
 	},
 	mutations: {
 		login(state, payload) {
+			// console.log(commit);
 			state.user = payload || '新用户';
 			state.hasLogin = true;
-			uni.setStorage({
-				key: 'token',
-				data: 'Bearer ' + payload.token
-			})
+			uni.setStorageSync('token','Bearer ' + payload.token)
 		},
 		logout(state) {
 			for (let i of Object.keys(state.user)) {
 				state.user[i] = ''
 			}
 			state.hasLogin = false;
-			uni.setStorage({
-				key: 'token',
-				data: ''
-			});
+			uni.setStorageSync('token', '');
+		},
+		setCurrentSong(state, payload) {
+			state.currentSong = payload;
 		}
 	},
 	actions: {
-		login({commit,state}, account) {
+		login({
+			commit,
+			state
+		}, account) {
 			return this._vm.$axios({
 				url: '/login',
 				method: 'POST',
@@ -45,28 +48,29 @@ const store = new Vuex.Store({
 				}
 				return data;
 			}).catch(err => {
-				alert(err);
 				console.log(err);
 			});
 		},
-		authentication({commit,state}) {
+		authentication({
+			commit,
+			state
+		}) {
 			return this._vm.$axios({
 				url: '/auth',
 				method: 'GET',
-				}).then(res => {
-					const data = res[1].data;
-					if (data.validUser === true) {
-						commit('login', data.userInfo);
-					} else {
-						commit('logout')
-					}
-				}).catch(err => {
-					console.log(err);
+			}).then(res => {
+				const data = res[1].data;
+				if (data.validUser === true) {
+					commit('login', data.userInfo);
+				} else {
 					commit('logout')
-				})  
+				}
+			}).catch(err => {
+				console.log(err);
+				commit('logout')
+			})
 		}
 	}
 })
 
 export default store
- 

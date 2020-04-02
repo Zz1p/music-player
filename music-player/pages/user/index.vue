@@ -60,7 +60,8 @@
 
 		.info {
 			padding-top: 20rpx;
-
+			color: $theme-bg-color;
+			
 			.item {
 				display: flex;
 				align-items: center;

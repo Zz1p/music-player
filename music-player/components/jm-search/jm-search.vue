@@ -41,20 +41,14 @@
 					success: (res) => {
 						if (res.confirm) {
 							this.searchHistory = [];
-							uni.setStorage({
-								key: 'searchLocal',
-								data: this.searchHistory
-							});
+							uni.setStorageSync('searchLocal', this.searchHistory);
 						}
 					}
 				});
 			},
 			setHistory(key) {
 				this.searchHistory.includes(key) ? '' : this.searchHistory.unshift(key)
-				uni.setStorage({
-					key: 'searchLocal',
-					data: this.searchHistory.join('-')
-				});
+				uni.setStorageSync('searchLocal', this.searchHistory.join('-'));
 			},
 			searchNow() {
 				this.showHistory = false;

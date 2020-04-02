@@ -1,11 +1,16 @@
 <template>
 	<view id="collect">
 		<view class="list" v-if="user.collect !== 0">
-			<view class="item">
-				<view class="left music-img"></view>
-				<view class="right music-info">
-					<view class="name"></view>
-					<view class="singer"></view>
+			<view class="item music-info" v-for="(item, index) in playlist" :key="item.id + item.name" @click="jump2Player(item.id)">
+				<view class="left">
+					<view class="top">{{item.name}}</view>
+					<view class="bottom">
+						<view class="author">{{item.author}}</view>
+					</view>
+				</view>
+				<view class="right">
+					<view class="favourite" v-if="item.unCollect" @click.stop="bindCollect(item)"></view>
+					<view class="favourite--active" @click.stop="bindCollect(item)" v-else></view>
 				</view>
 			</view>
 		</view>
@@ -14,32 +19,70 @@
 </template>
 
 <script>
-	import {
-		mapState
-	} from 'vuex';
+	import {mapState, mapMutations} from 'vuex';
 
 	export default {
-
 		data() {
 			return {
-
+				playlist: []
+			}
+		},
+		watch: {
+			hasLogin(newValue, oldValue) {
+				if (newValue) {
+					this.getCollection();
+				}
 			}
 		},
 		computed: {
-			...mapState(['hasLogin', 'user'])
+			...mapState(['hasLogin', 'user', 'currentSong'])
 		},
 		methods: {
+			...mapMutations(['setCurrentSong']),
 			getCollection() {
+				console.log(this.user.userId);
 				this.$axios({
 					url: '/user/collection',
 					method: 'GET',
 					data: {
-						userId: this.user.userId.toString()
+						userId: this.user.userId
 					}
 				}).then(res => {
-					console.log(res[1].data)
+					this.playlist = res[1].data;
 				}).catch(err => {
 					console.log(err);
+				})
+			},
+			open() {
+				this.$refs.popup.open()
+			},
+			bindCollect(item) {
+				item.unCollect ? this.deleteCollect(item) : this.addCollect(item);
+			},
+			addCollect(item) {
+				uni.showLoading({
+					title: '加载中'
+				})  
+				// @todo addCollect 发送请求 /user/collect/sub data: userId,songId(歌的id) t = 1 收藏，其他为取消
+				setTimeout(() => {
+					this.$set(item, 'unCollect', true);
+					uni.hideLoading();
+				}, 1000)
+			},
+			deleteCollect(item) {
+				uni.showLoading({
+					title: '加载中'
+				})
+				// @todo deleteCollet 发送请求 /user/collect/sub data: userId,songId(歌的id) t = 1 收藏，其他为取消
+				setTimeout(() => {
+					this.$set(item, 'unCollect', false);
+					uni.hideLoading();
+				}, 1000)
+			},
+			jump2Player(id) {
+				this.setCurrentSong(id);
+				uni.switchTab({
+					url: '../../player/index'
 				})
 			}
 		},
@@ -49,7 +92,9 @@
 					url: '../../index/index'
 				})
 			}
-			this.getCollection();
+			if (this.hasLogin) {
+				this.getCollection();
+			}
 		}
 	}
 </script>
@@ -59,9 +104,54 @@
 		background-color: $uni-bg-color-grey;
 	}
 
+	.favourite {
+		height: 100%;
+		width: 40rpx;
+		background: url(../../../static/img/favourite.png) 50% 50% / contain no-repeat;
+	}
+
+	.favourite--active {
+		height: 100%;
+		width: 40rpx;
+		background: url(../../../static/img/favourite--active.png) 50% 50% / contain no-repeat;
+	}
+
 	#collect {
-		padding: 20rpx;
 		width: 100%;
+		padding-top: 20rpx;
+
+		.item {
+			padding: 0 40rpx;
+			display: flex;
+			justify-content: space-between;
+			align-content: space-around;
+			flex-wrap: wrap;
+			height: 100rpx;
+			background-color: $uni-bg-color;
+			border-bottom: 1px solid $uni-bg-color-grey;
+
+			.left {
+				.top {
+					color: $theme-bg-color;
+				}
+
+				.bottom {
+					.author {
+						font-size: 80%;
+						color: $uni-text-color-grey;
+					}
+				}
+			}
+
+			.right {
+				padding: 0 20rpx;
+				.more {
+					height: 100%;
+					width: 40rpx;
+					background: url(../../../static/img/more.png) 50% 50% / contain no-repeat;
+				}
+			}
+		}
 
 		.none {
 			width: 100%;
