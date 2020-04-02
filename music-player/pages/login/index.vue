@@ -42,6 +42,9 @@
 				isDevtools: false,
 			}
 		},
+		computed: {
+			...mapState(['hasLogin'])
+		},
 		methods: {
 			...mapActions(['login']),
 			initPosition() {
@@ -90,6 +93,11 @@
 			},
 		},
 		onReady() {
+			if (this.hasLogin) {
+				uni.reLaunch({
+					url: '../index/index'
+				})
+			}
 			this.initPosition();
 			// #ifdef MP-WEIXIN
 			this.isDevtools = uni.getSystemInfoSync().platform === 'devtools';

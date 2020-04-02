@@ -11,7 +11,7 @@
 			</view>
 		</view>
 		<view class="btn-row">
-			<button v-if="!hasLogin" class="theme-button-color" hover-class="theme-button-color--active" @tap="bindLogin">登录</button>
+			<button v-if="hasLogin === false" class="theme-button-color" hover-class="theme-button-color--active" @tap="bindLogin">登录</button>
 			<button v-if="hasLogin" class="theme-button-color" hover-class="theme-button-color--active" @tap="bindLogout">退出登录</button>
 		</view>
 	</view>

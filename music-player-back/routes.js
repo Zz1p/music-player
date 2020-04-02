@@ -4,6 +4,8 @@ import bodyParser from 'koa-bodyparser';
 import cors from 'koa2-cors';
 import koaJwt from 'koa-jwt';
 import jwt from 'jsonwebtoken';
+import collection from './playlist';
+
 
 const app = new Koa();
 const router = new Router();
@@ -33,7 +35,7 @@ router.get('/api/list', async ctx => {
 
 router.post('/api/login', async ctx => {
     const user = ctx.request.body;
-    // @todo sql查询用户存在的话获取用户信息生成token 不存在的话返回validUser: false
+    // @todo sql根据username查询用户存在的话获取用户信息生成token 不存在的话返回validUser: false
     ctx.body = {
         validUser: true,
         userInfo: {
@@ -53,7 +55,7 @@ router.get('/api/auth', async ctx => {
                 validUser: false
             }
         }
-        // @todo sql查找用户信息后返回给前端
+        // @todo sql根据username查找用户信息后返回给前端
         ctx.body = {
             userInfo: {
                 userId: 1,
@@ -64,6 +66,12 @@ router.get('/api/auth', async ctx => {
             validUser: true,
         }
     });
+});
+
+router.get('/api/user/collection', async ctx => {
+    const userId = ctx;
+    ctx.body = collection;
+    console.log(userId)
 });
 
 export {

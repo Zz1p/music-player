@@ -14,24 +14,42 @@
 </template>
 
 <script>
-	import {mapState} from 'vuex';
-	
+	import {
+		mapState
+	} from 'vuex';
+
 	export default {
-		
+
 		data() {
 			return {
-				
+
 			}
 		},
 		computed: {
 			...mapState(['hasLogin', 'user'])
 		},
-		onLoad() {
-			if (!this.hasLogin) {
+		methods: {
+			getCollection() {
+				this.$axios({
+					url: '/user/collection',
+					method: 'GET',
+					data: {
+						userId: this.user.userId.toString()
+					}
+				}).then(res => {
+					console.log(res[1].data)
+				}).catch(err => {
+					console.log(err);
+				})
+			}
+		},
+		onReady() {
+			if (this.hasLogin === false) {
 				uni.reLaunch({
 					url: '../../index/index'
 				})
 			}
+			this.getCollection();
 		}
 	}
 </script>
@@ -40,11 +58,11 @@
 	page {
 		background-color: $uni-bg-color-grey;
 	}
-	
+
 	#collect {
 		padding: 20rpx;
 		width: 100%;
-		
+
 		.none {
 			width: 100%;
 			height: 50%;
