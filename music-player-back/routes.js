@@ -56,6 +56,7 @@ router.get('/api/auth', async ctx => {
             }
         }
         // @todo sql根据username查找用户信息后返回给前端
+        console.log(decode);
         ctx.body = {
             userInfo: {
                 userId: 1,
