@@ -30,7 +30,7 @@
 				showHistory: false
 			}
 		},
-		created() {length
+		created() {
 			this.searchHistory = uni.getStorageSync('searchLocal').length ? uni.getStorageSync('searchLocal').split('-') : [];
 		},
 		methods: {
