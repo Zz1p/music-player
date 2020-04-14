@@ -11,8 +11,9 @@ const store = new Vuex.Store({
 			collect: ''
 		},
 		hasLogin: undefined,
-		// 当前播放的歌的id，存到localStorage里去
+		// 当前播放的歌的id，存到localStorage里去, playlist也要存进去
 		currentSong: '',
+		playlist: ''
 	},
 	mutations: {
 		login(state, payload) {

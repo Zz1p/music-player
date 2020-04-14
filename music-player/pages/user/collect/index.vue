@@ -1,6 +1,8 @@
 <template>
 	<view id="collect">
 		<view class="list" v-if="user.collect !== 0">
+			<view class="item" @click="playAll"><view class="play"></view>播放全部({{playlist.length}})
+			</view>
 			<view class="item music-info" v-for="(item, index) in playlist" :key="item.id + item.name" @click="jump2Player(item.id)">
 				<view class="left">
 					<view class="top">{{item.name}}</view>
@@ -19,7 +21,10 @@
 </template>
 
 <script>
-	import {mapState, mapMutations} from 'vuex';
+	import {
+		mapState,
+		mapMutations
+	} from 'vuex';
 
 	export default {
 		data() {
@@ -62,7 +67,7 @@
 			addCollect(item) {
 				uni.showLoading({
 					title: '加载中'
-				})  
+				})
 				// @todo addCollect 发送请求 /user/collect/sub data: userId,songId(歌的id) t = 1 收藏，其他为取消
 				setTimeout(() => {
 					this.$set(item, 'unCollect', true);
@@ -84,6 +89,10 @@
 				uni.switchTab({
 					url: '../../player/index'
 				})
+			},
+			playAll() {
+				this.jump2Player(this.playlist[0].id);
+				
 			}
 		},
 		onReady() {
@@ -123,12 +132,20 @@
 		.item {
 			padding: 0 40rpx;
 			display: flex;
-			justify-content: space-between;
 			align-content: space-around;
 			flex-wrap: wrap;
 			height: 100rpx;
 			background-color: $uni-bg-color;
 			border-bottom: 1px solid $uni-bg-color-grey;
+			
+			&.music-info {
+				justify-content: space-between;
+			}
+			
+			.play {
+				padding-left: 30rpx;
+				background: url(../../../static/img/play.png) 0 50% / 30rpx 30rpx no-repeat;
+			}
 
 			.left {
 				.top {
@@ -145,6 +162,7 @@
 
 			.right {
 				padding: 0 20rpx;
+
 				.more {
 					height: 100%;
 					width: 40rpx;
