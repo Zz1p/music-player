@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App'
 import store from './store'
 
-Vue.prototype.baseURL = 'http://172.29.10.73:3000/api',
+Vue.prototype.baseURL = 'http://192.168.31.225:3000/api',
 Vue.config.productionTip = false
 Vue.prototype.$store = store
 Vue.prototype.$axios = function(options) {
