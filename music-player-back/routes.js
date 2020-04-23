@@ -5,12 +5,15 @@ import cors from 'koa2-cors';
 import koaJwt from 'koa-jwt';
 import jwt from 'jsonwebtoken';
 import collection from './playlist';
+import routerLoader from './routerLoader.js';
+import db from './dao/dbutil';
 
 
 const app = new Koa();
 const router = new Router();
 const jwtSecret = 'music_player_token';
 
+app.context.db = db;
 app.use(bodyParser());
 app.use(koaJwt({
     secret: jwtSecret,
@@ -18,6 +21,7 @@ app.use(koaJwt({
 }).unless({
     path: [/\/login/]
 }));
+
 app.use(cors());
 app.use((ctx, next) => {
     return next().catch((err) => {
@@ -29,50 +33,19 @@ app.use((ctx, next) => {
         }
     });
 });
+
+routerLoader(router);
+
 router.get('/api/list', async ctx => {
     ctx.body = ctx.query;
 });
 
-router.post('/api/login', async ctx => {
-    const user = ctx.request.body;
-    // @todo sql根据username查询用户存在的话获取用户信息生成token 不存在的话返回validUser: false
-    ctx.body = {
-        validUser: true,
-        userInfo: {
-            userId: 1,
-            collect: 123,
-            username: user.username,
-            token: jwt.sign({username: user.username, password: user.password}, jwtSecret, {expiresIn: 60 * 60 * 24 * 7})
-        }
-    }
-});
 
-router.get('/api/auth', async ctx => {
-    const token = ctx.request.headers.authorization.split(' ')[1];
-    jwt.verify(token, jwtSecret, (err, decode) => {
-        if (err) {
-            ctx.body = {
-                validUser: false
-            }
-        }
-        // @todo sql根据username查找用户信息后返回给前端
-        console.log(decode);
-        ctx.body = {
-            userInfo: {
-                userId: 1,
-                collect: 123,
-                username: decode.username,
-                token
-            },
-            validUser: true,
-        }
-    });
-});
 
 router.get('/api/user/collection',
     async ctx => {
     const userId = ctx.request.query.userId;    ctx.body = collection;
-    console.log(userId)
+    console.log('userId', userId)
 });
 
 export {

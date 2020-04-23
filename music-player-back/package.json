@@ -7,13 +7,15 @@
     "start": "nodemon --exec babel-node app.js"
   },
   "dependencies": {
+    "co-mysql": "^1.0.0",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.11.0",
     "koa-bodyparser": "^4.3.0",
     "koa-jwt": "^3.6.0",
     "koa-router": "^8.0.8",
     "koa-static": "^5.0.0",
-    "koa2-cors": "^2.0.6"
+    "koa2-cors": "^2.0.6",
+    "mysql": "^2.18.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
