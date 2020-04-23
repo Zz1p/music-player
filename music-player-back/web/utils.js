@@ -1,4 +1,4 @@
-import getUserDao from "../dao/getUserDao";
+import {getUserDao} from "../dao/userDao";
 import jwt from "jsonwebtoken";
 
 const jwtSecret = 'music_player_token';

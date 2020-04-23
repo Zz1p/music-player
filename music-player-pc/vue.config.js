@@ -7,4 +7,4 @@ module.exports = {
       patterns: [path.resolve(__dirname, "./src/styles/Global.less")]
     }
   }
-}
+};

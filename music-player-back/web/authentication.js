@@ -4,13 +4,6 @@ import utils from './utils';
 let path = new Map();
 const jwtSecret = 'music_player_token';
 
-
-const login = async ctx => {
-  const params = ctx.request.body;
-  ctx.body = await utils.getUser(params, ctx.db);
-};
-
-
 const authentication = async ctx => {
   let errFlag = false;
   const token = ctx.request.headers.authorization.split(' ')[1];
@@ -30,7 +23,6 @@ const authentication = async ctx => {
 };
 
 path.set("/api/auth", [authentication, 'get']);
-path.set("/api/login", [login, 'post']);
 
 export {
   path
