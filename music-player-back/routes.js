@@ -44,7 +44,7 @@ router.get('/api/list', async ctx => {
 router.get('/api/user/collection',
     async ctx => {
     const userId = ctx.request.query.userId;    ctx.body = collection;
-    console.log('userId', userId)
+    console.log('userId line47', userId)
 });
 
 export {

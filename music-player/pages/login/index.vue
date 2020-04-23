@@ -74,7 +74,7 @@
 				};
 				this.login(account)
 					.then(res => {
-						if (res.validUser === true) {
+						if (res.validUser === true && res.userInfo.role === 'member') {
 							this.jump2Main(account.username);
 						} else {
 							uni.showToast({

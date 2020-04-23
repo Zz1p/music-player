@@ -3,11 +3,11 @@
 		<view v-if="hasLogin" class="info">
 			<view class="item userInfo">
 				<view class="left avatar"></view>
-				<view class="right username">{{user.username}}</view>
+				<view class="right username">{{userInfo.username}}</view>
 			</view>
 			<view class="item collect" @tap="bindCollect" hover-class="item--active">
 				<view class="left collect-img"></view>
-				<view class="right collect-num">{{user.collect}} 首歌</view>
+				<view class="right collect-num">{{userInfo.collection || 0}} 首歌</view>
 			</view>
 		</view>
 		<view class="btn-row">

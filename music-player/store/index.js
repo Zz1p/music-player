@@ -26,8 +26,8 @@ const store = new Vuex.Store({
 			uni.setStorageSync('token','Bearer ' + payload.token)
 		},
 		logout(state) {
-			for (let i of Object.keys(state.user)) {
-				state.user[i] = ''
+			for (let i of Object.keys(state.userInfo)) {
+				state.userInfo[i] = ''
 			}
 			state.hasLogin = false;
 			uni.setStorageSync('token', '');
@@ -47,7 +47,7 @@ const store = new Vuex.Store({
 				data: account,
 			}).then(res => {
 				const data = res[1].data;
-				if (data.validUser === true) {
+				if (data.validUser === true && data.userInfo.role === 'member') {
 					commit('login', data.userInfo);
 				}
 				return data;
