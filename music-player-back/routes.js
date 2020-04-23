@@ -3,7 +3,6 @@ import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import cors from 'koa2-cors';
 import koaJwt from 'koa-jwt';
-import jwt from 'jsonwebtoken';
 import collection from './playlist';
 import routerLoader from './routerLoader.js';
 import db from './dao/dbutil';
