@@ -5,10 +5,13 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
 	state: {
-		user: {
+		userInfo: {
+			id: '',
 			userId: '',
 			username: '',
-			collect: ''
+			collection: '',
+			role: '',
+			token: ''
 		},
 		hasLogin: undefined,
 		// 当前播放的歌的id，存到localStorage里去, playlist也要存进去
@@ -18,7 +21,7 @@ const store = new Vuex.Store({
 	mutations: {
 		login(state, payload) {
 			// console.log(commit);
-			state.user = payload || '新用户';
+			state.userInfo = payload || '新用户';
 			state.hasLogin = true;
 			uni.setStorageSync('token','Bearer ' + payload.token)
 		},

@@ -30,7 +30,7 @@
 			}
 		},
 		computed: {
-			...mapState(['hasLogin', 'user'])
+			...mapState(['hasLogin', 'userInfo'])
 		},
 		methods: {
 			...mapMutations(['logout']),

@@ -1,6 +1,6 @@
 <template>
 	<view id="collect">
-		<view class="list" v-if="user.collect !== 0">
+		<view class="list" v-if="userInfo.collection !== 0">
 			<view class="item" @click="playAll"><view class="play"></view>播放全部({{playlist.length}})
 			</view>
 			<view class="item music-info" v-for="(item, index) in playlist" :key="item.id + item.name" @click="jump2Player(item.id)">
@@ -40,17 +40,16 @@
 			}
 		},
 		computed: {
-			...mapState(['hasLogin', 'user', 'currentSong'])
+			...mapState(['hasLogin', 'userInfo', 'currentSong'])
 		},
 		methods: {
 			...mapMutations(['setCurrentSong']),
 			getCollection() {
-				console.log(this.user.userId);
 				this.$axios({
 					url: '/user/collection',
 					method: 'GET',
 					data: {
-						userId: this.user.userId
+						userId: this.userInfo.id
 					}
 				}).then(res => {
 					this.playlist = res[1].data;
