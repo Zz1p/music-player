@@ -1,1 +1,23 @@
 @theme-bg-color: #0b877f;
+@theme-bg-color--active: #15635e;
+@theme-bg-color-grey:#f8f8f8;
+
+.theme-button-color {
+  background-color: @theme-bg-color;
+  color: #fff;
+}
+
+.theme-button-color--active {
+  background-color: @theme-bg-color--active;
+}
+
+.my-form {
+    border: 1px solid #ebebeb;
+    border-radius: 3px;
+    transition: .2s;
+    padding: 24px;
+
+    &:hover {
+      box-shadow: 0 0 8px 0 rgba(232, 237, 250, .6), 0 2px 4px 0 rgba(232, 237, 250, .5);
+    }
+}
