@@ -37,14 +37,11 @@ const store = new Vuex.Store({
 		}
 	},
 	actions: {
-		login({
-			commit,
-			state
-		}, account) {
+		login({commit,state}, params) {
 			return this._vm.$axios({
 				url: '/login',
 				method: 'POST',
-				data: account,
+				data: params,
 			}).then(res => {
 				const data = res[1].data;
 				if (data.validUser === true && data.userInfo.role === 'member') {
@@ -55,10 +52,7 @@ const store = new Vuex.Store({
 				console.log(err);
 			});
 		},
-		authentication({
-			commit,
-			state
-		}) {
+		authentication({commit,state}) {
 			return this._vm.$axios({
 				url: '/auth',
 				method: 'GET',
@@ -73,6 +67,15 @@ const store = new Vuex.Store({
 				console.log(err);
 				commit('logout')
 			})
+		},
+		register({commit,state}, params) {
+			return this._vm.$axios({
+				url: '/register',
+				method: 'POST',
+				data: params
+			}).then(res => {
+				console.log(res)
+			}).catch(err => console.log(err))
 		}
 	}
 })

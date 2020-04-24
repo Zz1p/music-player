@@ -1,4 +1,4 @@
-import {getUserDao} from "../dao/userDao";
+import {getUserDao, getUserByUsernameDao,insertUserDao} from "../dao/userDao";
 import jwt from "jsonwebtoken";
 
 const jwtSecret = 'music_player_token';
@@ -6,8 +6,8 @@ const jwtSecret = 'music_player_token';
 
 export default new class utils {
   async getUser(user, db) {
-    const result = await getUserDao(user.username, user.password, db);
-    if (result.length === 0) {
+    const result = await getUserDao(user, db);
+    if (!result.length) {
       return {
         validUser: false
       }
@@ -24,6 +24,12 @@ export default new class utils {
       }
     }
   };
+  async getUserByUsername(username, db) {
+    return await getUserByUsernameDao(username, db)
+  };
+  async insertUser(params, db) {
+    return await insertUserDao(params, db)
+  }
 }
 
 

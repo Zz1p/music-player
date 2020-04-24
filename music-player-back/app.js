@@ -1,5 +1,5 @@
-import source from 'koa-static';
-import {router, app} from './routes.js';
+import source from 'koa-static'
+import {router, app} from './routes.js'
 
 // post ctx.request.body get ctx.query
 

@@ -18,7 +18,7 @@ app.use(koaJwt({
     secret: jwtSecret,
     passthrough: true
 }).unless({
-    path: [/\/login/]
+    path: [/\/login/, /\/register/]
 }));
 
 app.use(cors());
@@ -38,7 +38,6 @@ routerLoader(router);
 router.get('/api/list', async ctx => {
     ctx.body = ctx.query;
 });
-
 
 
 router.get('/api/user/collection',

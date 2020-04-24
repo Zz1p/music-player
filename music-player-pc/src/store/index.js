@@ -5,23 +5,37 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    isAuthenticated: false
+    userInfo: {
+      id: '',
+      userId: '',
+      username: '',
+      collection: '',
+      role: '',
+      token: ''
+    },
+    hasLogin: undefined,
+    playlist: ''
   },
-  mutations: {},
+  mutations: {
+    login(state, payload) {
+      state.userInfo = payload || '新用户';
+      state.hasLogin = true;
+      localStorage.setItem('token', 'Bearer ' + payload.token);
+    },
+  },
   actions: {
     login({commit}, account) {
-      this.$axios.post({
-        url: '',
-        data: account
-      }).then(res => {
-        const data = res[1].data;
-        if (data.validUser === true && data.userInfo.role === 'member') {
-          commit('login', data.userInfo);
-        }
-        return data;
-      }).catch(err => {
-        console.log(err);
-      });
+      return axios.post('login', account)
+          .then(res => {
+            const data = res.data;
+            if (data.validUser === true && data.userInfo.role === 'admin') {
+              commit('login', data.userInfo);
+            }
+            return data;
+          })
+          .catch(err => {
+            console.log(err);
+          });
     },
   },
   modules: {}
