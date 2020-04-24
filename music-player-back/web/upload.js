@@ -1,16 +1,17 @@
-import multer from 'koa-multer'
+let api = new Map();
+import path from 'path'
 
-const storage = multer.diskStorage({
-  //定义文件保存路径
-  destination(req,file,cb){
-    cb(null,'./static/');
-  },
-  //修改文件名
-  filename(req,file,cb){
-    const fileFormat = (file.originalname).split(".");
-    cb(null,Date.now() + "." + fileFormat[fileFormat.length - 1]);
-  }
-});
+const upload = async ctx => {
+  const file = ctx.request.files['file\n'];
+  console.log(file);
+  console.log('origin', ctx.origin);
+  const basename = path.basename(file.path);
+  file.path = `${ctx.origin}/uploads/${basename}`;
+  ctx.body = file
+};
 
+api.set("/api/upload", [upload, 'post']);
 
-const upload = multer({ storage: storage });
+export {
+  api
+}

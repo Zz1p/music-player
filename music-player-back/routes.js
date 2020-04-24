@@ -1,6 +1,5 @@
 import Router from "koa-router";
 import Koa from 'koa';
-import bodyParser from 'koa-bodyparser';
 import cors from 'koa2-cors';
 import koaJwt from 'koa-jwt';
 import collection from './playlist';
@@ -13,12 +12,11 @@ const router = new Router();
 const jwtSecret = 'music_player_token';
 
 app.context.db = db;
-app.use(bodyParser());
 app.use(koaJwt({
     secret: jwtSecret,
     passthrough: true
 }).unless({
-    path: [/\/login/, /\/register/]
+    path: [/\/login/, /\/register/, /\/upload/]
 }));
 
 app.use(cors());

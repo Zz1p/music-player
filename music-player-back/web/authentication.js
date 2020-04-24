@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import utils from './utils';
 
-let path = new Map();
+let api = new Map();
 const jwtSecret = 'music_player_token';
 
 const authentication = async ctx => {
@@ -22,8 +22,8 @@ const authentication = async ctx => {
   ctx.body = await utils.getUser(decode, ctx.db);
 };
 
-path.set("/api/auth", [authentication, 'get']);
+api.set("/api/auth", [authentication, 'get']);
 
 export {
-  path
+  api
 }

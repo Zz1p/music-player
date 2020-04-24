@@ -1,5 +1,5 @@
 import utils from "./utils";
-let path = new Map();
+let api = new Map();
 
 
 const register = async ctx => {
@@ -13,8 +13,8 @@ const register = async ctx => {
   ctx.body = await utils.insertUser(params, ctx.db)
 };
 
-path.set("/api/register", [register, 'post']);
+api.set("/api/register", [register, 'post']);
 
 export {
-  path
+  api
 }

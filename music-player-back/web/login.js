@@ -1,5 +1,5 @@
 import utils from "./utils";
-let path = new Map();
+let api = new Map();
 
 
 const login = async ctx => {
@@ -7,8 +7,8 @@ const login = async ctx => {
   ctx.body = await utils.getUser(params, ctx.db);
 };
 
-path.set("/api/login", [login, 'post']);
+api.set("/api/login", [login, 'post']);
 
 export {
-  path
+  api
 }
