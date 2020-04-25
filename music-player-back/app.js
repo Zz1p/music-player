@@ -8,7 +8,8 @@ import path from 'path'
 app.use(koaBody({
   formidable: {
     uploadDir: path.join(__dirname, './static'),
-    keepExtensions: true
+    keepExtensions: true,
+    multiples: false
   },
   multipart: true
 }));
