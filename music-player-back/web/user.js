@@ -1,4 +1,4 @@
-import {userCollectionDao} from "../dao/userDao";
+import {updateUserCollectionDao} from "../dao/userDao";
 import utils from "./utils";
 let api = new Map();
 
@@ -18,14 +18,15 @@ const login = async ctx => {
   ctx.body = await utils.getUser(params, ctx.db);
 };
 
-const userCollection = async ctx => {
+const updateUserCollection = async ctx => {
   const params = ctx.request.body;
-  ctx.body = await userCollectionDao(params, ctx.db)
+  console.log(params);
+  ctx.body = await updateUserCollectionDao(params, ctx.db)
 };
 
 api.set("/api/login", [login, 'post']);
 api.set("/api/register", [register, 'post']);
-api.set("/api/userCollection", [userCollection, 'post']);
+api.set("/api/updateUserCollection", [updateUserCollection, 'post']);
 
 export {
   api

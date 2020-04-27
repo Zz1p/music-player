@@ -34,13 +34,24 @@ export default new class utils {
   };
 
   addItem2Arr(arr, item) {
-    arr.push(item);
-    return [...new Set(arr)];
+    item = JSON.parse(item);
+    const temp = arr.concat(item);
+    return [...new Set(temp)];
   };
 
   deleteItem2Arr(arr, item) {
+    item = JSON.parse(item);
     let temp = new Set(arr);
-    temp.delete(item);
+    if (Object.prototype.toString.call(item) === "[object Array]") {
+      console.log('for');
+      for (let i of item) {
+        console.log(i);
+        temp.delete(i);
+      }
+    } else {
+      temp.delete(item);
+    }
+    console.log([...temp]);
     return [...temp]
   }
 }

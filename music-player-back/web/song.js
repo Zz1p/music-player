@@ -9,12 +9,12 @@ const getSongsById = async ctx => {
   ctx.body = result;
 };
 
-const getSongs = async ctx => {
+const song = async ctx => {
   ctx.body = await getSongsDao(ctx.db)
 };
 
 api.set('/api/getSongsById', [getSongsById, 'get']);
-api.set('/api/getSongs', [getSongs, 'get']);
+api.set('/api/song', [song, 'get']);
 
 export {
   api

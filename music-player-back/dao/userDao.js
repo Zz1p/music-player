@@ -15,22 +15,18 @@ const getUserByUsernameDao = async (params, db) => {
   return await db.query(sql, [params]);
 };
 
-const userCollectionDao = async (params, db) => {
-  const getSql = 'select collection from user where id = ?';
-  const result = await db.query(getSql, [params.id]);
+const updateUserCollectionDao = async (params, db) => {
+  const selectSql = 'select collection from user where id = ?';
+  const result = await db.query(selectSql, [params.id]);
   let collection = result[0].collection.length ? JSON.parse(result[0].collection) : [];
   collection = params.t === '1' ? utils.addItem2Arr(collection, params.songId) : utils.deleteItem2Arr(collection, params.songId);
   const updateSql = 'update user set collection = ? where id = ?';
   return await db.query(updateSql, [JSON.stringify(collection), params.id])
 };
 
-const getUserCollectionDao = async () => {
-  
-};
-
 export {
   getUserDao,
   insertUserDao,
   getUserByUsernameDao,
-  userCollectionDao
+  updateUserCollectionDao
 }
