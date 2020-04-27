@@ -1,11 +1,11 @@
 const insertPosterDao = async (params, db) => {
-  const sql = 'insert into poster (`name`, `picUrl`, `songId`) values (?,?,?)';
-  db.query(sql, [params.name, params.picUrl, params.songId]);
+  const sql = 'insert into poster (`name`, `songId`) values (?,?)';
+  db.query(sql, [params.name, params.songId]);
 };
 
 const getPostersDao = async (params, db) => {
   const sql = 'select * from poster';
-  return await db.query(sql, [params.username, params.password]);
+  return await db.query(sql);
 };
 
 // params: id

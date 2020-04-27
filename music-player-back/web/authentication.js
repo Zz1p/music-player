@@ -22,7 +22,7 @@ const authentication = async ctx => {
   ctx.body = await utils.getUser(decode, ctx.db);
 };
 
-api.set("/api/auth", [authentication, 'get']);
+api.set('/api/auth', [authentication, 'get']);
 
 export {
   api

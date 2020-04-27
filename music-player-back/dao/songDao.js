@@ -9,8 +9,8 @@ const getSongsByIdDao = async (params, db) => {
 };
 
 const insertSongDao = async (params, db) => {
-  const sql = 'insert into song (`name`,`filename`, `url`, `author`) values (?,?,?,?)';
-  return await db.query(sql, [params.name, params.filename, params.url, params.author]);
+  const sql = 'insert into song (`name`,`filename`, `url`, `author`, `picUrl`) values (?,?,?,?, ?)';
+  return await db.query(sql, [params.name, params.filename, params.url, params.author, params.picUrl]);
 };
 
 export {

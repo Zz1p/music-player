@@ -24,9 +24,9 @@ const updateUserCollection = async ctx => {
   ctx.body = await updateUserCollectionDao(params, ctx.db)
 };
 
-api.set("/api/login", [login, 'post']);
-api.set("/api/register", [register, 'post']);
-api.set("/api/updateUserCollection", [updateUserCollection, 'post']);
+api.set('/api/login', [login, 'post']);
+api.set('/api/register', [register, 'post']);
+api.set('/api/updateUserCollection', [updateUserCollection, 'post']);
 
 export {
   api

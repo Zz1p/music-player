@@ -9,7 +9,7 @@ app.use(koaBody({
   formidable: {
     uploadDir: path.join(__dirname, './static'),
     keepExtensions: true,
-    multiples: false
+    multiples: true
   },
   multipart: true
 }));
