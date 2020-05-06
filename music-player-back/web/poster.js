@@ -14,7 +14,7 @@ const addPoster = async ctx => {
 
 const deletePoster = async ctx => {
   const params = ctx.request.body;
-  ctx.body = await deletePosterDao(params, ctx.db);
+  ctx.body = await deletePosterDao(params.id, ctx.db);
 };
 
 api.set('/api/getPosters', [getPosters, 'get']);

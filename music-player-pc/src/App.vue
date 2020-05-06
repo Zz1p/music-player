@@ -9,7 +9,9 @@
   export default {
     components: {
       myHeader
-    }
+    },
+    methods: {
+    },
   }
 </script>
 <style lang="less">

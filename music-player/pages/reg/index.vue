@@ -11,15 +11,17 @@
 			</view>
 		</view>
 		<view class="btn-row">
-			<button type="primary" class="primary" @tap="bindRegister">注册</button>
+			<button class="theme-button-color" hover-class="theme-button-color--active" @tap="bindRegister">注册</button>
 		</view>
 	</view>
 </template>
 
 <script>
 	import mInput from '../../components/m-input.vue';
-	import {mapActions} from 'vuex'
-	
+	import {
+		mapActions
+	} from 'vuex'
+
 	export default {
 		components: {
 			mInput
@@ -32,12 +34,8 @@
 			}
 		},
 		methods: {
-			...mapActions(['register']),
+			...mapActions(['register', 'login']),
 			bindRegister() {
-				/**
-				 * 客户端对账号信息进行一些必要的校验。
-				 * 实际开发中，根据业务需要进行处理，这里仅做示例。
-				 */
 				if (this.username.length < 5) {
 					uni.showToast({
 						icon: 'none',
@@ -58,18 +56,36 @@
 					password: this.password,
 					role: 'member'
 				}
-				this.register(data);
+				this.register(data)
+					.then(res => {
+						if (res.errMessage) {
+							uni.showToast({
+								title: res.errMessage
+							});
+						} else {
+							this.login(data)
+								.then(_ => {
+									this.jump2Main('注册成功');
+								})
+								.catch(err => console.log(err))
+						}
+					})
+					.catch(err => console.log(err));
+			},
+			jump2Main(title) {
 				uni.showToast({
-					title: '注册成功'
+					title: title
 				});
-				// uni.navigateBack({
-				// 	delta: 1
-				// });
-			}
+				setTimeout(() => {
+					uni.reLaunch({
+						url: '../index/index',
+					});
+				}, 1000);
+			},
 		}
 	}
 </script>
 
-<style>
-
+<style lang="scss">
+	// 必须有点内容，不然编译的时候就会忽略这个style，样式就会丢失
 </style>

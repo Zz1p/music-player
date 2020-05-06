@@ -4,6 +4,7 @@ import {insertPlaylistDao} from "../dao/playlistDao";
 let api = new Map();
 
 const uploadSong = async ctx => {
+  console.log(ctx.request.body);
   const file = ctx.request.files['file'];
   const pic = ctx.request.files['pic'];
   const body = ctx.request.body;
@@ -29,13 +30,13 @@ const uploadSong = async ctx => {
   }
 };
 
-const uploadPic = async ctx => {
+const uploadPlaylist = async ctx => {
   const pic = ctx.request.files['pic'];
   const body = ctx.request.body;
   const picName = path.basename(pic.path);
   pic.path = `${ctx.origin}/${picName}`;
   const params = {
-    name: body.name || '',
+    name: body.name,
     picUrl: pic.path,
     songs: body.songs || ''
   };
@@ -52,7 +53,7 @@ const uploadPic = async ctx => {
 
 
 api.set('/api/uploadSong', [uploadSong, 'post']);
-api.set('/api/uploadPic', [uploadPic, 'post']);
+api.set('/api/uploadPlaylist', [uploadPlaylist, 'post']);
 export {
   api
 }

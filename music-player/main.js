@@ -1,20 +1,14 @@
 import Vue from 'vue'
 import App from './App'
 import store from './store'
+import axios from './plugins/axios.js'
 
-Vue.prototype.baseURL = 'http://192.168.31.225:3000/api',
+
 Vue.config.productionTip = false
 Vue.prototype.$store = store
-Vue.prototype.$axios = function(options) {
-	return uni.request({
-		url: this.baseURL + options.url || '',
-		method: options.method || 'GET',
-		data: options.data || '',
-		header: {
-			Authorization: uni.getStorageSync('token').length ? uni.getStorageSync('token') : ''
-		}
-	})
-}
+Vue.prototype.$axios = axios
+
+
 App.mpType = 'app'
 
 const app = new Vue({

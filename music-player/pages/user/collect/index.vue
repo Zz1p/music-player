@@ -1,7 +1,8 @@
 <template>
 	<view id="collect">
-		<view class="list" v-if="userInfo.collection !== 0">
-			<view class="item" @click="playAll"><view class="play"></view>播放全部({{playlist.length}})
+		<view class="list" v-if="userInfo.collection">
+			<view class="item" @click="playAll">
+				<view class="play"></view>播放全部({{playlist.length}})
 			</view>
 			<view class="item music-info" v-for="(item, index) in playlist" :key="item.id + item.name" @click="jump2Player(item.id)">
 				<view class="left">
@@ -11,8 +12,7 @@
 					</view>
 				</view>
 				<view class="right">
-					<view class="favourite" v-if="item.unCollect" @click.stop="bindCollect(item)"></view>
-					<view class="favourite--active" @click.stop="bindCollect(item)" v-else></view>
+					<view class="favourite--active" @click.stop="deleteCollection(item.id)"></view>
 				</view>
 			</view>
 		</view>
@@ -23,7 +23,8 @@
 <script>
 	import {
 		mapState,
-		mapMutations
+		mapMutations,
+		mapActions
 	} from 'vuex';
 
 	export default {
@@ -44,45 +45,7 @@
 		},
 		methods: {
 			...mapMutations(['setCurrentSong']),
-			getCollection() {
-				this.$axios({
-					url: '/user/collection',
-					method: 'GET',
-					data: {
-						userId: this.userInfo.id
-					}
-				}).then(res => {
-					this.playlist = res[1].data;
-				}).catch(err => {
-					console.log(err);
-				})
-			},
-			open() {
-				this.$refs.popup.open()
-			},
-			bindCollect(item) {
-				item.unCollect ? this.deleteCollect(item) : this.addCollect(item);
-			},
-			addCollect(item) {
-				uni.showLoading({
-					title: '加载中'
-				})
-				// @todo addCollect 发送请求 /user/collect/sub data: userId,songId(歌的id) t = 1 收藏，其他为取消
-				setTimeout(() => {
-					this.$set(item, 'unCollect', true);
-					uni.hideLoading();
-				}, 1000)
-			},
-			deleteCollect(item) {
-				uni.showLoading({
-					title: '加载中'
-				})
-				// @todo deleteCollet 发送请求 /user/collect/sub data: userId,songId(歌的id) t = 1 收藏，其他为取消
-				setTimeout(() => {
-					this.$set(item, 'unCollect', false);
-					uni.hideLoading();
-				}, 1000)
-			},
+			...mapActions(['getCollection','updateCollection']),
 			jump2Player(id) {
 				this.setCurrentSong(id);
 				uni.switchTab({
@@ -91,7 +54,18 @@
 			},
 			playAll() {
 				this.jump2Player(this.playlist[0].id);
-				
+			},
+			setPlaylist() {
+				this.getCollection()
+					.then(res => {
+						this.playlist = res
+					}).catch(err => console.log(err));
+			},
+			deleteCollection(id) {
+				this.updateCollection({
+					songId: id,
+					t: '2'
+				})
 			}
 		},
 		onReady() {
@@ -101,7 +75,7 @@
 				})
 			}
 			if (this.hasLogin) {
-				this.getCollection();
+				this.setPlaylist();
 			}
 		}
 	}
@@ -136,11 +110,11 @@
 			height: 100rpx;
 			background-color: $uni-bg-color;
 			border-bottom: 1px solid $uni-bg-color-grey;
-			
+
 			&.music-info {
 				justify-content: space-between;
 			}
-			
+
 			.play {
 				padding-left: 30rpx;
 				background: url(../../../static/img/play.png) 0 50% / 30rpx 30rpx no-repeat;

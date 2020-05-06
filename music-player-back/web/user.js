@@ -20,7 +20,6 @@ const login = async ctx => {
 
 const updateUserCollection = async ctx => {
   const params = ctx.request.body;
-  console.log(params);
   ctx.body = await updateUserCollectionDao(params, ctx.db)
 };
 

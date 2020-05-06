@@ -20,10 +20,10 @@ const deletePlayListDao = async (params, db) => {
   return await db.query(sql, [params])
 };
 
-// params: id
+// params: name
 const playListDao = async (params, db) => {
-const sql = params ? 'select * from playlist where id = ?' : 'select * from playlist';
-return await db.query(sql, [params])
+  const sql = params ? `select * from playlist where name like '%${params}%'` : 'select * from playlist';
+  return await db.query(sql, [params])
 };
 
 

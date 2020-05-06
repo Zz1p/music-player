@@ -7,7 +7,7 @@
 			</view>
 			<view class="item collect" @tap="bindCollect" hover-class="item--active">
 				<view class="left collect-img"></view>
-				<view class="right collect-num">{{userInfo.collection || 0}} 首歌</view>
+				<view class="right collect-num">{{userInfo.collection.length || 0}} 首歌</view>
 			</view>
 		</view>
 		<view class="btn-row">
@@ -26,7 +26,6 @@
 	export default {
 		data() {
 			return {
-				collectNum: 0
 			}
 		},
 		computed: {

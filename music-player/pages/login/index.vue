@@ -75,7 +75,7 @@
 				this.login(account)
 					.then(res => {
 						if (res.validUser === true && res.userInfo.role === 'member') {
-							this.jump2Main(account.username);
+							this.jump2Main();
 						} else {
 							uni.showToast({
 								icon: 'none',
@@ -85,7 +85,7 @@
 					})
 					.catch(err => console.log(err))
 			},
-			jump2Main(userName) {
+			jump2Main() {
 				uni.reLaunch({
 					url: '../index/index',
 				});
@@ -116,40 +116,5 @@
 	.action-row navigator {
 		color: $theme-bg-color;
 		padding: 0 10px;
-	}
-
-	.oauth-row {
-		display: flex;
-		flex-direction: row;
-		justify-content: center;
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-	}
-
-	.oauth-image {
-		position: relative;
-		width: 50px;
-		height: 50px;
-		border: 1px solid #dddddd;
-		border-radius: 50px;
-		margin: 0 20px;
-		background-color: #ffffff;
-	}
-
-	.oauth-image image {
-		width: 30px;
-		height: 30px;
-		margin: 10px;
-	}
-
-	.oauth-image button {
-		position: absolute;
-		left: 0;
-		top: 0;
-		width: 100%;
-		height: 100%;
-		opacity: 0;
 	}
 </style>
