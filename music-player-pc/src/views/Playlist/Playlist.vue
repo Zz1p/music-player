@@ -157,7 +157,7 @@
       left: 0;
       top: 0;
       height: 100%;
-      padding: 10px;
+      padding: 5px;
       box-sizing: border-box;
     }
   }

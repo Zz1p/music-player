@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="searchTopBox">
+		<view class="searchTopBox" :style="{top: statusBarHeight + 'px'}">
 			<view class="searchBoxRadius">
 				<view class="grace-search-icon searchBoxIcon"></view>
 				<input class="searchBoxIpt" type="search" v-model="key" @focus="showHistory = true" @confirm="searchNow"
@@ -10,10 +10,10 @@
 		<view class="searchBotBox" v-show="showHistory" @blur="showHistory = false">
 			<view class="ov">
 				<view>搜索历史</view>
-				<view @click="clearHistory" class="grace-more-r grace-search-remove"></view>
+				<view @tap="clearHistory" class="grace-more-r grace-search-remove"></view>
 			</view>
 			<view class="searchHistoryBox">
-				<view class="searchHistoryBoxItem" v-for="(item,index) in searchHistory" :key='index' @click=show(item)>
+				<view class="searchHistoryBoxItem" v-for="(item,index) in searchHistory" :key='index' @tap=show(item)>
 					{{item}}
 				</view>
 				<view class="cancel" @tap="showHistory = false"></view>
@@ -27,7 +27,8 @@
 			return {
 				searchHistory: [],
 				key: '',
-				showHistory: false
+				showHistory: false,
+				statusBarHeight: 0
 			}
 		},
 		created() {
@@ -61,11 +62,15 @@
 					return false;
 				}
 				this.setHistory(this.key);
+				this.$emit('search', this.key)
 			},
 			show(item) {
 				this.key = item;
 				this.searchNow();
 			}
+		},
+		mounted() {
+			this.statusBarHeight = uni.getSystemInfoSync().statusBarHeight;
 		}
 	}
 </script>
@@ -82,9 +87,11 @@
 	.searchTopBox {
 		width: 100%;
 		background-color: $theme-bg-color;
-		height: 100upx;
+		height: 100rpx;
 		box-sizing: border-box;
 		padding-top: 15upx;
+		position: fixed;
+		z-index: 999;
 	}
 
 	.searchBoxRadius {
@@ -111,9 +118,11 @@
 	}
 
 	.searchBotBox {
+		z-index: 999;
+		background-color: $uni-bg-color-grey;
+		position: fixed;
 		width: 100%;
-		margin-top: 30upx;
-		padding: 15upx 3%;
+		padding: 30rpx 3% 15rpx;
 		box-sizing: border-box;
 	}
 

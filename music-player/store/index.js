@@ -10,18 +10,17 @@ const store = new Vuex.Store({
 			id: '',
 			userId: '',
 			username: '',
-			collection: '',
+			collection: [],
 			role: '',
-			token: ''
+			token: '',
 		},
 		hasLogin: undefined,
 		// 当前播放的歌的id，存到localStorage里去, playlist也要存进去
-		currentSong: '',
-		playlist: ''
+		currentSongId: uni.getStorageSync('currentSongId') || 0,
+		playlist: uni.getStorageSync('playlist') || []
 	},
 	mutations: {
 		login(state, payload) {
-			// console.log(commit);
 			payload.collection = payload.collection ? JSON.parse(payload.collection) : [];
 			state.userInfo = payload || '新用户';
 			state.hasLogin = true;
@@ -35,7 +34,8 @@ const store = new Vuex.Store({
 			uni.setStorageSync('token', '');
 		},
 		setCurrentSong(state, payload) {
-			state.currentSong = payload;
+			state.currentSongId = payload
+			uni.setStorageSync('currentSongId', payload)
 		},
 		updateUserCollection(state, payload) {
 			if (payload.t === '1') {
@@ -53,7 +53,50 @@ const store = new Vuex.Store({
 				state.userInfo.collection = [...temp];
 			}
 		},
-
+		updateCurrentPlaylist(state, payload) {
+			if (payload.t === 1) {
+				const temp = state.playlist.concat(payload.songId)
+				state.playlist = [...new Set(temp)];
+			} else {
+				let temp = new Set(state.playlist);
+				if (Object.prototype.toString.call(payload.songId) === "[object Array]") {
+					for (let i of payload.songId) {
+						payload.songId.delete(i);
+					}
+				} else {
+					temp.delete(payload.songId);
+				}
+				state.playlist = [...temp];
+			}
+			uni.setStorageSync('playlist', state.playlist)
+		},
+		unshiftSong2Playlist(state) {
+			state.playlist.unshift(state.currentSongId);
+			uni.setStorageSync('playlist', state.playlist)
+		},
+		updateCurrentSongId(state, payload) {
+			const playlist = state.playlist
+			const index = playlist.indexOf(state.currentSongId)
+			if (index === -1) {
+				this.commit('setCurrentSong', playlist[0])
+				return [];
+			};
+			if (payload === 1) {
+				if (index !== playlist.length - 1) {
+					this.commit('setCurrentSong', playlist[index + 1])
+				} else {
+					this.commit('setCurrentSong', playlist[0])
+				}
+			} else if (payload === -1){
+				if (index !== 0) {
+					this.commit('setCurrentSong', playlist[index - 1])
+				} else {
+					this.commit('setCurrentSong', playlist[playlist.length - 1])
+				}
+			} else {
+				this.commit('setCurrentSong', playlist[parseInt(Math.random() * playlist.length)])
+			}
+		}
 	},
 	actions: {
 		login({
@@ -122,11 +165,24 @@ const store = new Vuex.Store({
 				return res[1].data;
 			}).catch(err => console.log(err));
 		},
+		getSongsById({commit,state}, id) {
+			if (!id || (Object.prototype.toString.call(id) === "[object Array]" && !id.length)) {
+				return [];
+			}
+			return axios({
+					url: 'getSongsById',
+					method: 'GET',
+					data: {
+						id
+					}
+				}).then(res => res[1].data)
+				.catch(err => console.log(err))
+		},
 		updateCollection({
 			commit,
 			state
 		}, params) {
-			axios({
+			return axios({
 				url: 'updateUserCollection',
 				method: 'POST',
 				data: {
@@ -135,7 +191,11 @@ const store = new Vuex.Store({
 					songId: params.songId
 				}
 			}).then(res => {
-				commit('updateUserCollection', params);
+				if (res[1].data.affectedRows === 1) {
+					commit('updateUserCollection', params);
+					return 'ok';
+				}
+				return 'error';
 			}).catch(err => console.log(err))
 		},
 	}

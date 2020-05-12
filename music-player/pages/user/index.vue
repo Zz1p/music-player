@@ -50,7 +50,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	page {
 		background-color: $uni-bg-color-grey;
 	}
@@ -97,7 +97,7 @@
 						width: 40rpx;
 						height: 100%;
 						content: '';
-						background: url(../../static/img/forward.png) 50% 50% / contain no-repeat;
+						background: url(../../static/img/forward.svg) 50% 50% / contain no-repeat;
 					}
 				}
 			}

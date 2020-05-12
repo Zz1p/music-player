@@ -115,6 +115,6 @@
 
 	.action-row navigator {
 		color: $theme-bg-color;
-		padding: 0 10px;
+		padding: 0 20rpx;
 	}
 </style>
