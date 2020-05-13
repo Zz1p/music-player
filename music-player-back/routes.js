@@ -15,7 +15,7 @@ app.use(koaJwt({
     secret: jwtSecret,
     passthrough: true
 }).unless({
-    path: [/\/login/, /\/register/, /\/upload/]
+    path: [/\/login/, /\/register/, /\/playlist/, /\/getPosters/, /\/getSongsById/, /\/song/, /\/getSongByName/]
 }));
 
 app.use(cors());
