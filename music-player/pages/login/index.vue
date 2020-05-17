@@ -26,7 +26,8 @@
 		mapActions
 	} from 'vuex'
 	import mInput from '../../components/m-input.vue'
-
+	import md5 from '@/components/md5.js'
+	
 	export default {
 		components: {
 			mInput
@@ -70,7 +71,7 @@
 				}
 				const account = {
 					username: this.username,
-					password: this.password
+					password: md5(this.password)
 				};
 				this.login(account)
 					.then(res => {

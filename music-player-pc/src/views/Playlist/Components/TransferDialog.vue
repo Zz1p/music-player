@@ -64,13 +64,13 @@
     },
     methods: {
       handleChange(value, direction, movedKeys) {
-        console.log(value, direction, movedKeys);
         axios.post('updatePlaylist', {
           id: this.playlist.id,
           t: direction === 'right' ? '1' : '2',
           songs: movedKeys
-        }).then(res => {
-          console.log(res)
+        }).then(_ => {
+          this.$message.success('操作成功');
+          this.$emit('update')
         }).catch(err => console.log(err))
       }
     }

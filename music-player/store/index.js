@@ -16,7 +16,7 @@ const store = new Vuex.Store({
 		},
 		hasLogin: undefined,
 		// 当前播放的歌的id，存到localStorage里去, playlist也要存进去
-		currentSongId: uni.getStorageSync('currentSongId') || 0,
+		currentSongId: uni.getStorageSync('currentSongId') || undefined,
 		playlist: uni.getStorageSync('playlist') || []
 	},
 	mutations: {
@@ -71,6 +71,7 @@ const store = new Vuex.Store({
 			uni.setStorageSync('playlist', state.playlist)
 		},
 		unshiftSong2Playlist(state) {
+			if (!state.currentSongId) return;
 			state.playlist.unshift(state.currentSongId);
 			uni.setStorageSync('playlist', state.playlist)
 		},
@@ -94,6 +95,10 @@ const store = new Vuex.Store({
 					this.commit('setCurrentSong', playlist[playlist.length - 1])
 				}
 			} else {
+				let songId = playlist[parseInt(Math.random() * playlist.length)]
+				while (songId === state.currentSongId) {
+					songId = playlist[parseInt(Math.random() * playlist.length)]
+				}
 				this.commit('setCurrentSong', playlist[parseInt(Math.random() * playlist.length)])
 			}
 		}
@@ -148,25 +153,9 @@ const store = new Vuex.Store({
 				return res[1].data;
 			}).catch(err => console.log(err))
 		},
-		getCollection({
-			commit,
-			state
-		}) {
-			if (!state.userInfo.collection.length) {
-				return [];
-			}
-			return axios({
-				url: 'getSongsById',
-				method: 'GET',
-				data: {
-					id: state.userInfo.collection
-				}
-			}).then(res => {
-				return res[1].data;
-			}).catch(err => console.log(err));
-		},
 		getSongsById({commit,state}, id) {
-			if (!id || (Object.prototype.toString.call(id) === "[object Array]" && !id.length)) {
+			id = Object.prototype.toString.call(id) === "[object Array]" ? id.join() : id.toString();
+			if (!id.length) {
 				return [];
 			}
 			return axios({

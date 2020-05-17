@@ -38,7 +38,12 @@
         </el-upload>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="upload('songForm')">上传</el-button>
+        <el-button
+            type="primary"
+            @click="upload('songForm')"
+            v-loading.fullscreen.lock="fullscreenLoading">
+          上传
+        </el-button>
       </el-form-item>
     </el-form>
   </el-dialog>
@@ -59,7 +64,7 @@
           name: '',
           author: '',
           pic: '',
-          file: ''
+          file: '',
         },
         imgUrl: '',
         rules: {
@@ -75,7 +80,8 @@
           file: [
             {required: true, message: '请上传mp3文件', trigger: 'blur'},
           ]
-        }
+        },
+        fullscreenLoading: false
       }
     },
     computed: {
@@ -101,11 +107,11 @@
           if (type === 'pic') {
             const isJPG = file.type === 'image/jpeg';
             const isLt2M = file.size / 1024 / 1024 < 4;
-            if (!isJPG) {
-              this.$message.error('上传头像图片只能是 JPG 格式!');
-            }
             if (!isLt2M) {
               this.$message.error('上传头像图片大小不能超过 4MB!');
+            }
+            if (!isJPG) {
+              this.$message.error('上传头像图片只能是 JPG 格式!');
             }
             return isJPG && isLt2M;
           }
@@ -119,6 +125,7 @@
       upload(formName) {
         this.$refs[formName].validate((valid) => {
           if (!valid) return false;
+          this.fullscreenLoading = true;
           let formData = new FormData();
           for (let [key, value] of Object.entries(this.songForm)) {
             formData.append(key, value);
@@ -126,6 +133,7 @@
           axios.post('uploadSong', formData)
               .then(res => {
                 if (res.data.errMessage === 'ok') {
+                  this.fullscreenLoading = false;
                   this.$message.success('上传成功');
                   this.$emit('update:visible', false);
                   this.$emit('update');
@@ -135,7 +143,10 @@
                   this.imgUrl = '';
                 }
               })
-              .catch(err => console.log(err))
+              .catch(err => {
+                this.fullscreenLoading = false;
+                console.log(err)
+              })
         });
       },
       httpRequest(type) {

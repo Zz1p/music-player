@@ -42,9 +42,6 @@
             prop="url"
             label="音乐"
             show-overflow-tooltip>
-          <template slot-scope="scope">
-            <audio :src="scope.row.url" controls></audio>
-          </template>
         </el-table-column>
         <el-table-column label="操作" width="80">
           <template slot-scope="scope">

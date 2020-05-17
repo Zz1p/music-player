@@ -13,7 +13,7 @@
 			</view>
 		</view>
 		<uni-popup ref="popup" type="bottom" class="pop">
-			<view class="list">
+			<view class="list" :style="{'padding-bottom': windowBottom + 'px'}">
 				<view class="item" v-if="iscollected(popItem.id) &&hasLogin"  @tap="uncollect(popItem.id)">
 					<view class="favourite--active"></view>
 					<view class="text">取消收藏</view>
@@ -53,7 +53,8 @@
 		},
 		data() {
 			return {
-				popItem: {}
+				popItem: {},
+				windowBottom: 0
 			};
 		},
 		computed: {
@@ -116,6 +117,9 @@
 				})
 				this.$refs.popup.close();
 			}
+		},
+		mounted() {
+			this.windowBottom = uni.getSystemInfoSync().windowBottom
 		}
 	}
 </script>
@@ -141,6 +145,7 @@
 			}
 
 			.left {
+				padding: 10rpx 0;
 				.top {
 					color: $uni-text-color;
 				}
@@ -154,6 +159,7 @@
 			}
 
 			.right {
+				height: 100%;
 				padding: 0 20rpx;
 
 				.more {
@@ -170,7 +176,6 @@
 			display: flex;
 			height: 100rpx;
 			background-color: #fff;
-			padding-bottom: 100rpx;
 
 			.item {
 				display: flex;
@@ -178,6 +183,7 @@
 				flex: 1;
 				height: 100%;
 				border: none;
+				align-items: center;
 				
 				.favourite {
 					height: 40rpx;

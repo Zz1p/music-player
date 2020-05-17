@@ -17,12 +17,7 @@ url: /login
 login {
 	username,
 	password
-}
-
-url: user/collection
-getCollection  {
-	
-}
+}1
 
 url: /user/collect/sub
 addCollect & deleteCollect {

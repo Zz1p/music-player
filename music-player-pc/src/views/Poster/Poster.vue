@@ -17,12 +17,12 @@
         </el-table-column>
         <el-table-column
             prop="name"
-            label="推荐理由">
+            label="推荐理由"
+            width="180">
         </el-table-column>
         <el-table-column
             prop="songName"
-            label="歌曲"
-            width="120">
+            label="歌曲">
         </el-table-column>
         <el-table-column label="操作" width="180">
           <template slot-scope="scope">
@@ -104,6 +104,10 @@
         position: absolute;
         right: 10px;
       }
+    }
+
+    .table {
+      margin: 0 20px;
     }
   }
 

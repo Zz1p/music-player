@@ -25,8 +25,7 @@
 
 	export default {
 		data() {
-			return {
-			}
+			return {}
 		},
 		computed: {
 			...mapState(['hasLogin', 'userInfo'])
@@ -50,17 +49,20 @@
 	}
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 	page {
 		background-color: $uni-bg-color-grey;
 	}
+</style>
+
+<style lang="scss" scoped>
 
 	.content {
 
 		.info {
 			padding-top: 20rpx;
 			color: $theme-bg-color;
-			
+
 			.item {
 				display: flex;
 				align-items: center;
@@ -68,7 +70,7 @@
 				height: 120rpx;
 				background-color: #fff;
 				border-bottom: 1px solid $uni-bg-color-grey;
-				
+
 				&.item--active {
 					background-color: $uni-bg-color-hover;
 				}
@@ -91,6 +93,7 @@
 					flex: 3;
 					padding-left: 20rpx;
 					position: relative;
+
 					&.collect-num::after {
 						position: absolute;
 						right: 10rpx;

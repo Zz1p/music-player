@@ -1,5 +1,6 @@
 <template>
-	<view class="wrapper">
+	<view class="wrapper" :style="{ 'margin-top': statusBarHeight + 'px'}">
+		<view :style="{ height: statusBarHeight + 'px', position: 'absolute'}"></view>
 		<image class="blur" :src="currentSong.picUrl" mode="aspectFill"></image>
 		<view id="player">
 			<view class="info">
@@ -8,28 +9,30 @@
 				<view class="author">{{currentSong.author}}</view>
 			</view>
 			<view class="bottom">
-				<slider class="progress-bar" :value="currentTime" @change="sliderChange" block-size="12" :max="duration" />
+				<slider class="progress-bar" :value="currentTime" @change="sliderChange" block-size="16" :max="duration"
+				 backgroundColor="#999" activeColor="#fff" />
 				<view class="song-time">
 					<view class="currentTime">{{currentTime | ss2mmss}}</view>
 					<view class="duration">{{duration | ss2mmss}}</view>
 				</view>
 				<view class="operation">
-					<image class="playMode" @tap="updatePlayModeIndex" :src="`../../static/img/${playMode}.svg`" mode="aspectFit"></image>
-					<view class="prev" @tap="prev"></view>
-					<view class="play" @tap="play" v-show="innerAudioContext.paused"></view>
-					<view class="pause" @tap="pause" v-show="!innerAudioContext.paused"></view>
-					<view class="next" @tap="next"></view>
-					<view class="playlist" @tap="open"></view>
+					<image class="item playMode" @tap="updatePlayModeIndex" :src="`../../static/img/${playMode}.svg`" mode="aspectFit"></image>
+					<image class="item prev" @tap="prev" :src="'../../static/img/back.svg'" mode="aspectFit"></image>
+					<image class="item pause" v-show="!innerAudioContext.paused" @tap="play" :src="'../../static/img/pause.svg'" mode="aspectFit"></image>
+					<image class="item play" v-show="innerAudioContext.paused" @tap="play" :src="'../../static/img/play.svg'" mode="aspectFill"></image>
+					<image class="item next" :src="'../../static/img/next.svg'" mode="aspectFit" @tap="next"></image>
+					<image class="item playlist" @tap="open" :src="'../../static/img/list.svg'" mode="aspectFit"></image>
 				</view>
 			</view>
 			<uni-popup ref="popup" type="bottom" class="pop">
-				<view class="list" v-if="currentPlaylist.length">
+				<view class="list" v-if="currentPlaylist && currentPlaylist.length" :style="{'padding-bottom': windowBottom + 'px'}">
 					<view class="item" :class="{active: currentSongId === item.id}" v-for="(item, index) in comuptedCurrentPlaylist"
 					 :key="item.id" @tap="playThisSong(item.id)">
 						<view class="left">{{item.name}}
 							<view class="author">- {{item.author}}</view>
 						</view>
-						<view class="right" @tap.stop="deleteSongFromPlaylist(item.id)"></view>
+						<image class="right" v-show="currentSongId !== item.id" :src="'../../static/img/delete.svg'" mode="aspectFit"
+						 @tap.stop="deleteSongFromPlaylist(item.id)"></image>
 					</view>
 				</view>
 				<view class="err-message" v-else>
@@ -58,7 +61,9 @@
 				duration: 200,
 				currentTime: 0,
 				playModeIndex: 0,
-				currentPlaylist: []
+				currentPlaylist: [],
+				statusBarHeight: 0,
+				windowBottom: 0
 			}
 		},
 		computed: {
@@ -96,31 +101,34 @@
 			...mapActions(['getSongsById']),
 			createAudio() {
 				if (!this.currentSong || !this.currentSong.hasOwnProperty('url')) return;
+				uni.showLoading({
+					title: 'Loading...'
+				})
+				if (this.innerAudioContext) {
+					this.innerAudioContext.destroy();
+				}
 				this.innerAudioContext = uni.createInnerAudioContext();
 				this.innerAudioContext.src = this.currentSong.url;
+				this.innerAudioContext.autoplay = true;
 				this.innerAudioContext.onCanplay(() => {
 					this.duration = this.innerAudioContext.duration
-					this.innerAudioContext.play();
+					uni.hideLoading();
 				});
 				this.innerAudioContext.onError(res => {
-					console.log(res);
 					uni.showToast({
 						title: 'mp3文件不存在'
 					})
 					setTimeout(_ => {
 						this.next()
-					}, 500)
+					}, 1000)
 				});
 				this.innerAudioContext.onTimeUpdate(_ => {
 					this.currentTime = this.innerAudioContext.currentTime
+					this.duration = this.innerAudioContext.duration
 				});
 				this.innerAudioContext.onEnded(_ => {
-					console.log(this.playMode);
 					if (this.playMode === 'loop') {
 						this.next()
-					}
-					if (this.playMode === 'repeat') {
-						this.innerAudioContext.seek(0)
 					}
 					if (this.playMode === 'shuffle') {
 						this.random()
@@ -129,6 +137,11 @@
 			},
 			updatePlayModeIndex() {
 				this.playModeIndex = (this.playModeIndex + 1) % 3
+				if (this.playMode === 'repeat') {
+					this.innerAudioContext.loop = true
+				} else {
+					this.innerAudioContext.loop = false
+				}
 			},
 			getCurrentSong() {
 				this.getSongsById(this.currentSongId)
@@ -139,13 +152,13 @@
 					.catch(err => console.log(err))
 			},
 			play() {
-				this.innerAudioContext.paused && this.innerAudioContext.play();
-			},
-			pause() {
-				!this.innerAudioContext.paused && this.innerAudioContext.pause();
+				this.innerAudioContext.paused ? this.innerAudioContext.play() : this.innerAudioContext.pause();
 			},
 			sliderChange(e) {
-				this.innerAudioContext.seek(e.detail.value)
+				this.play()
+				e.detail.value < this.innerAudioContext.buffered ? this.innerAudioContext.seek(e.detail.value) :
+					this.innerAudioContext.seek(this.innerAudioContext.buffered)
+				this.play()
 			},
 			prev() {
 				this.updateCurrentSongId(-1)
@@ -189,21 +202,27 @@
 				return mm + ':' + ss
 			}
 		},
+		mounted() {
+			this.statusBarHeight = uni.getSystemInfoSync().statusBarHeight;
+			this.windowBottom = uni.getSystemInfoSync().windowBottom;
+		}
 	}
 </script>
 
 <style lang="scss" scoped>
 	.wrapper {
-		color: #fff;
+		position: relative;
+		overflow: hidden;
 		width: 100%;
-		background-color: rgba($color: #111, $alpha: .6);
+		color: #fff;
+		background-color: rgba($color: #000, $alpha: .5);
 
 		.blur {
 			width: 100%;
 			height: 100%;
 			position: absolute;
 			z-index: -1;
-			filter: blur(30px);
+			filter: blur(20rpx);
 		}
 	}
 
@@ -219,7 +238,7 @@
 			padding: 60rpx;
 
 			.songImg {
-				height: 700rpx;
+				height: 600rpx;
 				width: 100%;
 				box-sizing: border-box;
 				border-radius: 20rpx;
@@ -252,14 +271,6 @@
 			.song-time {
 				display: flex;
 				justify-content: space-between;
-				
-				.currentTime {
-					
-				}
-				
-				.duration {
-					
-				}
 			}
 
 			.operation {
@@ -267,39 +278,18 @@
 				align-items: center;
 				justify-content: space-between;
 
-				.playMode {
-					height: 100rpx;
-					width: 100rpx;
-				}
+				.item {
+					height: 60rpx;
+					width: 60rpx;
+					padding: 20rpx;
 
-				.play {
-					height: 100rpx;
-					width: 100rpx;
-					background: url(../../static/img/play.svg) center center / contain no-repeat;
-				}
+					&.play,
+					&.pause {
+						width: 100rpx;
+						height: 100rpx;
+						padding: 0;
+					}
 
-				.pause {
-					height: 100rpx;
-					width: 100rpx;
-					background: url(../../static/img/pause.svg) center center / contain no-repeat;
-				}
-
-				.next {
-					height: 100rpx;
-					width: 100rpx;
-					background: url(../../static/img/next.svg) center center / 50% 50% no-repeat;
-				}
-
-				.prev {
-					height: 100rpx;
-					width: 100rpx;
-					background: url(../../static/img/back.svg) center center / 50% 50% no-repeat;
-				}
-
-				.playlist {
-					height: 100rpx;
-					width: 100rpx;
-					background: url(../../static/img/list.svg) center center / 70% 70% no-repeat;
 				}
 
 			}
@@ -309,10 +299,11 @@
 
 	.pop {
 		.list {
-			max-height: 70vh;
+			display: flex;
+			position: relative;
+			max-height: 700rpx;
 			overflow: scroll;
 			background-color: #1d232c;
-			padding-bottom: 100rpx;
 
 			.item {
 				display: flex;
@@ -344,7 +335,6 @@
 					padding: 0 20rpx;
 					width: 20rpx;
 					height: 100%;
-					background: url(../../static/img/delete.svg) 50% 50% / 50% 50% no-repeat;
 				}
 			}
 		}

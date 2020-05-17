@@ -51,7 +51,8 @@
     <upload-playlist-dialog :visible.sync="uploadPlaylistDialogVisible" @update="search"></upload-playlist-dialog>
     <transfer-dialog :visible.sync="transferDialogVisible"
                      :allSongs="allSongs"
-                     :playlist="currentPlaylist"></transfer-dialog>
+                     :playlist="currentPlaylist"
+                     @update="search"></transfer-dialog>
   </div>
 </template>
 
@@ -159,6 +160,10 @@
       height: 100%;
       padding: 5px;
       box-sizing: border-box;
+    }
+
+    .table {
+      margin: 0 20px;
     }
   }
 

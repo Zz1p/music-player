@@ -37,7 +37,8 @@
 				"navigationBarTitleText": "正在播放",
 				"navigationStyle": "custom",
 				"app-plus": {
-					"titleNView": false
+					"titleNView": false,
+					"color": "#fff"
 				}
 			}
 		}

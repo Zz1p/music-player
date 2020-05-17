@@ -1,6 +1,6 @@
 <template>
 	<view id="collect">
-		<view class="list" v-if="userInfo.collection">
+		<view class="list" v-if="userInfo.collection.length">
 			<view class="item" @tap="playAll">
 				<view class="play"></view>播放全部({{collectSongs.length}})
 			</view>
@@ -30,7 +30,7 @@
 		watch: {
 			hasLogin(newValue, oldValue) {
 				if (newValue) {
-					this.getCollection();
+					this.getCollectSongs();
 				}
 			}
 		},
@@ -39,9 +39,9 @@
 		},
 		methods: {
 			...mapMutations(['updateCurrentPlaylist', 'setCurrentSong']),
-			...mapActions(['getCollection']),
+			...mapActions(['getSongsById']),
 			playAll() {
-				this.setCurrentSong(this.collectSongs[0]);
+				this.setCurrentSong(this.collectSongs[0].id);
 				this.updateCurrentPlaylist({
 					songId: this.userInfo.collection,
 					t: 1
@@ -51,7 +51,7 @@
 				})
 			},
 			getCollectSongs() {
-				this.getCollection()
+				this.getSongsById(this.userInfo.collection)
 					.then(res => {
 						this.collectSongs = res
 					}).catch(err => console.log(err));
@@ -82,14 +82,14 @@
 		.item {
 			padding: 0 40rpx;
 			display: flex;
-			align-content: space-around;
 			flex-wrap: wrap;
 			height: 100rpx;
 			background-color: $uni-bg-color;
 			border-bottom: 1px solid $uni-bg-color-grey;
+			align-items: center;
 
 			.play {
-				padding-left: 30rpx;
+				padding: 20rpx;
 				background: url(../../../static/img/play.png) 0 50% / 30rpx 30rpx no-repeat;
 			}
 		}

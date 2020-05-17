@@ -1,6 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '../store'
+import Login from "../views/User/Login";
+import Register from "../views/User/Register";
+import Playlist from "../views/Playlist/Playlist";
+import Poster from "../views/Poster/Poster";
+
 
 const originalReplace = VueRouter.prototype.replace;
 VueRouter.prototype.replace = function (location) {
@@ -20,12 +25,12 @@ const routes = [{
 }, {
   path: '/login',
   name: 'Login',
-  component: () => import('../views/User/Login.vue'),
+  component: Login
 
 }, {
   path: '/register',
   name: 'Register',
-  component: () => import('../views/User/Register.vue'),
+  component: Register
 }, {
   path: '/song',
   name: 'Song',
@@ -34,12 +39,12 @@ const routes = [{
 }, {
   path: '/Playlist',
   name: 'Playlist',
-  component: () => import('../views/Playlist/Playlist.vue'),
+  component: Playlist,
   meta: {auth: true}
 }, {
   path: '/poster',
   name: 'Poster',
-  component: () => import('../views/Poster/Poster.vue'),
+  component: Poster,
   meta: {auth: true}
 }, {
   path: '*',

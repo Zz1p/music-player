@@ -5,7 +5,6 @@ const getSongsDao = async (db) => {
 
 const getSongsByIdDao = async (params, db) => {
   const sql = `select * from song where id in (${params.id})`;
-  console.log('db', db);
   return await db.query(sql);
 };
 

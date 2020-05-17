@@ -56,14 +56,14 @@
 		.item {
 			padding: 0 40rpx;
 			display: flex;
-			align-content: space-around;
+			align-items: center;
 			flex-wrap: wrap;
 			height: 100rpx;
 			background-color: $uni-bg-color;
 			border-bottom: 1px solid $uni-bg-color-grey;
 
 			.play {
-				padding-left: 30rpx;
+				padding: 20rpx;
 				background: url(../../static/img/play.png) 0 50% / 30rpx 30rpx no-repeat;
 			}
 		}

@@ -1,18 +1,19 @@
 <template>
-	<view class="index">
-		<view :style="{ height: statusBarHeight + 'px'}"></view>
+	<view class="index" :style="{'padding-top': 50 + statusBarHeight + 'px'}">
+		<view :style="{ height: statusBarHeight + 'px', 'background-color': '#fff', position: 'fixed', top:'0', 'z-index': 999, 'width': '100%'}"></view>
 		<search @search="search"></search>
 		<view class="content">
 			<view class="swiper" v-if="posterList.length">
-				<swiper :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval" :duration="duration">
-					<swiper-item v-for="item in songList" :key="item.id">
-						<view class="swiper-item">
-							<image class="img" :src="item.picUrl" mode="aspectFill" @tap="jump2Player(item)"></image>
+				<swiper :indicator-dots="indicatorDots" autoplay :interval="interval" :duration="duration" circular>
+					<swiper-item v-for="(item, index) in songList" :key="item.id">
+						<view class="swiper-item" @tap="jump2Player(item)">
+							<view class="blur" :style="{background: `url(${item.picUrl}) 0 0 / cover no-repeat`}"></view>
+							<view class="name">{{posterList[index].name}}</view>
 						</view>
 					</swiper-item>
 				</swiper>
 			</view>
-			<h3 class="title">歌单列表</h3>
+			<h3 class="title" v-if="playlist.length">歌单列表</h3>
 			<view class="playlist" v-if="playlist.length" :style="{height: playlistHeight}">
 				<view class="wrapper" :style="{width: playlistWrapperWidth}">
 					<view class="item" v-for="item in playlist" :key="item.id" @tap="showPlaylist(item)">
@@ -45,8 +46,7 @@
 			return {
 				statusBarHeight: 0,
 				indicatorDots: true,
-				autoplay: true,
-				interval: 2000,
+				interval: 3000,
 				duration: 500,
 				songList: [],
 				posterList: [],
@@ -61,7 +61,7 @@
 				return length * 110 + 'px';
 			},
 			playlistHeight() {
-				return 130 + this.playlist.length % 5 * 130 + 'px';
+				return 130 + parseInt(this.playlist.length / 5) * 130 + 'px';
 			}
 		},
 		methods: {
@@ -126,23 +126,47 @@
 	}
 </script>
 
+<style lang="scss">
+	page {
+		background-color: $uni-bg-color-grey;
+	}
+</style>
+
 <style scoped lang="scss">
+
 	.index {
 		flex: 1;
-		padding-top: 100rpx;
 		.swiper {
 			border-radius: 20rpx;
 			margin: 20rpx 0;
 
 			.swiper-item {
+				position: relative;
 				margin: 0 30rpx;
 				height: 100%;
-
-				.img {
+				border-radius: 20rpx;
+				overflow: hidden;
+				
+				.blur {
+					position: absolute;
+					z-index: -1;
 					height: 100%;
 					width: 100%;
-					border-radius: 20rpx;
 				}
+				
+				.name {
+					position: absolute;
+					right: 0;
+					top: 20rpx;
+					padding: 5rpx 20rpx;
+					text-align: center;
+					font-size: 80%;
+					border-top-left-radius: 22rpx;
+					border-bottom-left-radius: 22rpx;
+					background: #fff;
+					box-shadow: 0 0 5px 0 #ddd;
+				}
+
 			}
 		}
 
