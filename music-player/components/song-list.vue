@@ -116,7 +116,11 @@
 					title: '已加入播放列表'
 				})
 				this.$refs.popup.close();
-			}
+			},
+			clear(e) {
+				// TODO nvue 取消冒泡
+				e.stopPropagation()
+			},
 		},
 		mounted() {
 			this.windowBottom = uni.getSystemInfoSync().windowBottom

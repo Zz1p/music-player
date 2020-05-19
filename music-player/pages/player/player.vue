@@ -4,7 +4,7 @@
 		<image class="blur" :src="currentSong.picUrl" mode="aspectFill"></image>
 		<view id="player">
 			<view class="info">
-				<image class="songImg" :src="currentSong.picUrl" mode="aspectFill"></image>
+				<preload-img class="songImg" :src="currentSong.picUrl" :mode="'aspectFill'"></preload-img>
 				<view class="name">{{currentSong.name}}</view>
 				<view class="author">{{currentSong.author}}</view>
 			</view>
@@ -44,6 +44,7 @@
 </template>
 
 <script>
+	import preloadImg from '@/components/preload-img.vue'
 	import uniPopup from '@/components/uni-popup/uni-popup.vue'
 	import {
 		mapState,
@@ -52,6 +53,10 @@
 	} from 'vuex'
 
 	export default {
+		components: {
+			uniPopup,
+			preloadImg
+		},
 		data() {
 			return {
 				currentSong: {
@@ -102,7 +107,7 @@
 			createAudio() {
 				if (!this.currentSong || !this.currentSong.hasOwnProperty('url')) return;
 				uni.showLoading({
-					title: 'Loading...'
+					title: '加载mp3...'
 				})
 				if (this.innerAudioContext) {
 					this.innerAudioContext.destroy();
@@ -112,12 +117,14 @@
 				this.innerAudioContext.autoplay = true;
 				this.innerAudioContext.onCanplay(() => {
 					this.duration = this.innerAudioContext.duration
-					uni.hideLoading();
+					this.duration && uni.hideLoading();
 				});
 				this.innerAudioContext.onError(res => {
 					uni.showToast({
-						title: 'mp3文件不存在'
+						title: 'mp3文件不存在',
+						icon: 'none'
 					})
+					console.log(res)
 					setTimeout(_ => {
 						this.next()
 					}, 1000)
@@ -155,10 +162,10 @@
 				this.innerAudioContext.paused ? this.innerAudioContext.play() : this.innerAudioContext.pause();
 			},
 			sliderChange(e) {
-				this.play()
+				this.innerAudioContext.pause();
 				e.detail.value < this.innerAudioContext.buffered ? this.innerAudioContext.seek(e.detail.value) :
 					this.innerAudioContext.seek(this.innerAudioContext.buffered)
-				this.play()
+				this.innerAudioContext.play()
 			},
 			prev() {
 				this.updateCurrentSongId(-1)
@@ -238,21 +245,23 @@
 			padding: 60rpx;
 
 			.songImg {
-				height: 600rpx;
+				height: 45vh;
 				width: 100%;
 				box-sizing: border-box;
+				overflow: hidden;
 				border-radius: 20rpx;
 				box-shadow: 0 0 20px 3px #333;
 			}
 
 			.name {
-				padding: 60rpx 0 15rpx;
-				font-size: 150%;
+				padding: 20rpx 0 10rpx;
+				font-size: 120%;
 				width: 100%;
 			}
 
 			.author {
 				width: 100%;
+				font-size: 80%;
 				color: rgba($color: $uni-bg-color-grey, $alpha: .5);
 			}
 		}
@@ -299,7 +308,6 @@
 
 	.pop {
 		.list {
-			display: flex;
 			position: relative;
 			max-height: 700rpx;
 			overflow: scroll;
@@ -308,7 +316,6 @@
 			.item {
 				display: flex;
 				justify-content: space-between;
-				border: none;
 				padding: 20rpx 30rpx;
 				height: 60rpx;
 				line-height: 60rpx;

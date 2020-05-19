@@ -7,7 +7,7 @@
 				<swiper :indicator-dots="indicatorDots" autoplay :interval="interval" :duration="duration" circular>
 					<swiper-item v-for="(item, index) in songList" :key="item.id">
 						<view class="swiper-item" @tap="jump2Player(item)">
-							<view class="blur" :style="{background: `url(${item.picUrl}) 0 0 / cover no-repeat`}"></view>
+							<preload-img class="blur" :src="item.picUrl" :mode="'widthFix'"></preload-img>
 							<view class="name">{{posterList[index].name}}</view>
 						</view>
 					</swiper-item>
@@ -17,7 +17,7 @@
 			<view class="playlist" v-if="playlist.length" :style="{height: playlistHeight}">
 				<view class="wrapper" :style="{width: playlistWrapperWidth}">
 					<view class="item" v-for="item in playlist" :key="item.id" @tap="showPlaylist(item)">
-						<view class="img" :style="{background: `url(${item.picUrl}) center center / cover`}"></view>
+						<preload-img class="img" :src="item.picUrl" :mode="'aspectFill'"></preload-img>
 						<view class="name">{{item.name}}</view>
 					</view>
 				</view>
@@ -30,17 +30,19 @@
 <script>
 	import uniPopup from "@/components/uni-popup/uni-popup.vue"
 	import songList from "@/components/song-list.vue"
+	import search from '@/components/jm-search/jm-search.vue'
+	import preloadImg from '@/components/preload-img.vue'
 	import {
 		mapState,
 		mapActions,
 		mapMutations
 	} from 'vuex'
-	import search from '@/components/jm-search/jm-search.vue'
-
+	
 	export default {
 		components: {
 			search,
-			songList
+			songList,
+			preloadImg
 		},
 		data() {
 			return {
@@ -119,10 +121,16 @@
 		},
 		mounted() {
 			this.statusBarHeight = uni.getSystemInfoSync().statusBarHeight;
-			this.getPosters();
-			this.getPlaylist();
-			this.getSongs();
-		}
+			uni.showLoading({
+				title: 'loading'
+			})
+			Promise.all([this.getPosters(), this.getPlaylist(), this.getSongs()])
+				.then(res => {
+					uni.hideLoading()
+				}).catch(_ => {
+					uni.hideLoading()
+				})
+		},
 	}
 </script>
 
