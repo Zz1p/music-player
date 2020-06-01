@@ -59,7 +59,6 @@ const router = new VueRouter({
 
 router.beforeEach(async (to, from, next) => {
   const result = await store.dispatch('authentication');
-  console.log(result);
   if (to.matched.some(m => m.meta.auth)) {
     if (result.validUser) {
       next()

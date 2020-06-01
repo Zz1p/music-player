@@ -34,6 +34,7 @@
 
 <script>
   import {mapActions} from 'vuex'
+  import md5 from 'js-md5';
 
   export default {
     name: "register",
@@ -52,11 +53,16 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
+            this.registerForm.password = md5(this.registerForm.password)
             this.register(this.registerForm)
                 .then(_ => {
                   this.login(this.registerForm)
                       .then(res => {
-                        this.$router.replace('/');
+                        if (!res.validUser) {
+                          this.$message.error('账号密码错误！')
+                        } else {
+                          window.location.reload();
+                        }
                       });
                 });
           } else {

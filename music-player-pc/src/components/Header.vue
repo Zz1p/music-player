@@ -4,7 +4,8 @@
              class="el-menu-demo"
              router
              mode="horizontal">
-      <el-menu-item claass="is-active">音乐播放器后台管理系统</el-menu-item>
+      <el-menu-item class="is-active large-font">音乐播放器后台管理系统</el-menu-item>
+      <el-menu-item v-if="hasLogin" class="is-active">管理员：{{userInfo.username}}</el-menu-item>
       <el-menu-item v-if="hasLogin" class="right" @click="bindLogout">退出登录</el-menu-item>
       <el-menu-item v-if="!hasLogin" class="right" index="/login">登录</el-menu-item>
       <el-menu-item v-if="!hasLogin" class="right" index="/register">注册</el-menu-item>
@@ -25,7 +26,7 @@
       return {}
     },
     computed: {
-      ...mapState(['hasLogin'])
+      ...mapState(['hasLogin', 'userInfo'])
     },
 
     methods: {
@@ -42,6 +43,11 @@
   #nav {
     .right {
       float: right;
+    }
+
+    .large-font {
+      font-size: 120%;
+      font-weight: bolder;
     }
   }
 </style>

@@ -21,6 +21,7 @@
 	import {
 		mapActions
 	} from 'vuex'
+  import md5 from '@/components/md5.js'
 
 	export default {
 		components: {
@@ -53,7 +54,7 @@
 
 				const data = {
 					username: this.username,
-					password: this.password,
+					password: md5(this.password),
 					role: 'member'
 				}
 				this.register(data)
