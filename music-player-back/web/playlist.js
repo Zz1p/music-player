@@ -1,4 +1,4 @@
-import {deletePlayListDao, updatePlaylistDao, playListDao, insertPlaylistDao} from "../dao/playlistDao";
+import {deletePlayListDao, updatePlaylistDao, playListDao} from "../dao/playlistDao";
 
 let api = new Map();
 
@@ -9,7 +9,6 @@ const playlist = async ctx => {
 
 const updatePlaylist = async ctx => {
   const params = ctx.request.body;
-  console.log(params);
   ctx.body = await updatePlaylistDao(params, ctx.db);
 };
 

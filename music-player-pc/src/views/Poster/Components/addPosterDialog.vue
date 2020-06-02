@@ -3,11 +3,11 @@
       title="添加推荐"
       :visible.sync="show"
       @close="$emit('update:visible', false)"
-      width="50%"
+      width="30%"
       top="5vh">
     <el-form :model="posterForm" label-width="80px" :rules="rules" ref="posterForm">
       <el-form-item label="描述" prop="name">
-        <el-input v-model="posterForm.name" placeholder="描述"></el-input>
+        <el-input v-model="posterForm.name" placeholder="描述" style="width: 193px"></el-input>
       </el-form-item>
       <el-form-item label="对应歌曲" prop="songId">
         <el-select
@@ -55,6 +55,7 @@
           ],
           name: [
             {required: true, message: '请输入描述', trigger: 'blur'},
+            { max: 10, message: '请控制在10字以内'}
           ],
         }
       }

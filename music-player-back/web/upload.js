@@ -4,7 +4,6 @@ import {insertPlaylistDao} from "../dao/playlistDao";
 let api = new Map();
 
 const uploadSong = async ctx => {
-  console.log(ctx.request.body);
   const file = ctx.request.files['file'];
   const pic = ctx.request.files['pic'];
   const body = ctx.request.body;
