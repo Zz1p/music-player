@@ -81,7 +81,7 @@ const store = new Vuex.Store({
 			if (index === -1) {
 				this.commit('setCurrentSong', playlist[0])
 				return [];
-			};
+			}
 			if (payload === 1) {
 				if (index !== playlist.length - 1) {
 					this.commit('setCurrentSong', playlist[index + 1])

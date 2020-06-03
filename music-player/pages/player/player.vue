@@ -26,7 +26,7 @@
 			</view>
 			<uni-popup ref="popup" type="bottom" class="pop">
 				<view class="list" v-if="currentPlaylist && currentPlaylist.length" :style="{'padding-bottom': windowBottom + 'px'}">
-					<view class="item" :class="{active: currentSongId === item.id}" v-for="(item, index) in comuptedCurrentPlaylist"
+					<view class="item" :class="{active: currentSongId === item.id}" v-for="(item, index) in computedCurrentPlaylist"
 					 :key="item.id" @tap="playThisSong(item.id)">
 						<view class="left">{{item.name}}
 							<view class="author">- {{item.author}}</view>
@@ -76,13 +76,12 @@
 			playMode() {
 				return ['loop', 'repeat', 'shuffle'][this.playModeIndex];
 			},
-			comuptedCurrentPlaylist() {
+			computedCurrentPlaylist() {
 				const temp = []
 				for (let i of this.playlist) {
 					for (let j of this.currentPlaylist) {
 						if (j.id === i) {
 							temp.push(j)
-							continue
 						}
 					}
 				}
@@ -124,7 +123,6 @@
 						title: 'mp3文件不存在',
 						icon: 'none'
 					})
-					console.log(res)
 					setTimeout(_ => {
 						this.next()
 					}, 1000)
@@ -144,11 +142,7 @@
 			},
 			updatePlayModeIndex() {
 				this.playModeIndex = (this.playModeIndex + 1) % 3
-				if (this.playMode === 'repeat') {
-					this.innerAudioContext.loop = true
-				} else {
-					this.innerAudioContext.loop = false
-				}
+				this.innerAudioContext.loop = this.playMode === 'repeat';
 			},
 			getCurrentSong() {
 				this.getSongsById(this.currentSongId)
@@ -197,7 +191,6 @@
 			playThisSong(id) {
 				this.setCurrentSong(id)
 			}
-
 		},
 		filters: {
 			ss2mmss(ss) {
