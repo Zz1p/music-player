@@ -8,7 +8,7 @@
 					<swiper-item v-for="(item, index) in songList" :key="item.id">
 						<view class="swiper-item" @tap="jump2Player(item)">
 							<preload-img class="blur" :src="item.picUrl" :mode="'widthFix'"></preload-img>
-							<view class="name">{{posterList[index].name}}</view>
+							<view class="name">{{recommendList[index]}}</view>
 						</view>
 					</swiper-item>
 				</swiper>
@@ -53,17 +53,18 @@
 				songList: [],
 				posterList: [],
 				playlist: [],
-				allSongs: []
+				allSongs: [],
+				recommendList: []
 			}
 		},
 		computed: {
-			...mapState(['hasLogin', ]),
+			...mapState(['hasLogin']),
 			playlistWrapperWidth() {
 				const length = this.playlist.length <= 5 ? this.playlist.length : 5
 				return length * 110 + 'px';
 			},
 			playlistHeight() {
-				return 130 + parseInt(this.playlist.length / 5) * 130 + 'px';
+				return 130 + parseInt(this.playlist.length / 6) * 130 + 'px';
 			}
 		},
 		methods: {
@@ -81,7 +82,14 @@
 						}
 						this.posterList = data;
 						this.getSongsById(songIdList)
-							.then(res => this.songList = res)
+							.then(res => {
+								this.songList = res;
+								for (let i of res) {
+									for (let j of this.posterList) {
+										i.id === j.songId && this.recommendList.push(j.name)
+									}
+								}
+							})
 							.catch(err => console.log(err))
 					})
 					.catch(err => console.log(err))

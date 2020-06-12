@@ -19,7 +19,7 @@
           <el-option
               v-for="item in allSongs"
               :key="item.filename"
-              :label="item.name"
+              :label="`${item.name} - ${item.author}`"
               :value="item.id">
           </el-option>
         </el-select>
@@ -95,11 +95,9 @@
         });
       },
       getSongName(id) {
-        console.log(id);
         for (let i of this.allSongs) {
           if (i.id === id) {
-            console.log(i)
-             return i.name;
+             return `${i.name} - ${i.author}`;
           }
         }
         return '';

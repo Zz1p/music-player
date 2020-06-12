@@ -21,6 +21,11 @@
             width="180">
         </el-table-column>
         <el-table-column
+            prop="songId"
+            label="歌曲ID"
+            width="180">
+        </el-table-column>
+        <el-table-column
             prop="songName"
             label="歌曲">
         </el-table-column>

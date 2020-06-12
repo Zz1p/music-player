@@ -116,7 +116,7 @@
 				this.innerAudioContext.autoplay = true;
 				this.innerAudioContext.onCanplay(() => {
 					this.duration = this.innerAudioContext.duration
-					this.duration && uni.hideLoading();
+					uni.hideLoading();
 				});
 				this.innerAudioContext.onError(res => {
 					uni.showToast({
